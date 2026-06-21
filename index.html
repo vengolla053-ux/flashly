@@ -1,0 +1,3391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#5B21B6">
+<meta name="description" content="Flashly Home - Village Grocery Delivery in 10-30 minutes">
+<title>Flashly Home - Village Grocery in Minutes</title>
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #5B21B6;
+  --primary-dark: #4C1D95;
+  --primary-light: #7C3AED;
+  --accent: #F59E0B;
+  --accent2: #10B981;
+  --danger: #EF4444;
+  --bg: #F5F3FF;
+  --bg2: #EDE9FE;
+  --card: #FFFFFF;
+  --text: #1E1B4B;
+  --text2: #6B7280;
+  --text3: #9CA3AF;
+  --border: #E5E7EB;
+  --shadow: 0 4px 24px rgba(91,33,182,0.10);
+  --shadow2: 0 2px 8px rgba(0,0,0,0.06);
+  --radius: 16px;
+  --radius2: 12px;
+  --radius3: 8px;
+  --font: 'DM Sans', sans-serif;
+  --font-head: 'Syne', sans-serif;
+  --nav-h: 64px;
+  --header-h: 60px;
+  --transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; -webkit-tap-highlight-color: transparent; }
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+  max-width: 480px;
+  margin: 0 auto;
+  position: relative;
+}
+/* SCROLLBAR */
+::-webkit-scrollbar { width: 3px; height: 3px; }
+::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
+
+/* UTILITIES */
+.hidden { display: none !important; }
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.items-center { align-items: center; }
+.justify-between { justify-content: space-between; }
+.gap-2 { gap: 8px; }
+.gap-3 { gap: 12px; }
+.w-full { width: 100%; }
+.text-center { text-align: center; }
+.relative { position: relative; }
+.bold { font-weight: 700; }
+
+/* PAGES */
+.page { display: none; min-height: 100vh; flex-direction: column; animation: fadeIn 0.3s ease; }
+.page.active { display: flex; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+/* ======== SPLASH ======== */
+#page-splash {
+  background: linear-gradient(145deg, #4C1D95 0%, #5B21B6 40%, #7C3AED 100%);
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+.splash-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  animation: splashPop 0.6s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+@keyframes splashPop { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.splash-icon {
+  width: 96px; height: 96px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 28px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 48px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.2);
+}
+.splash-name {
+  font-family: var(--font-head);
+  font-size: 40px; font-weight: 800;
+  color: white;
+  letter-spacing: -1px;
+}
+.splash-name span { color: #F59E0B; }
+.splash-tag { color: rgba(255,255,255,0.75); font-size: 14px; }
+.splash-loader { display: flex; gap: 6px; margin-top: 40px; }
+.splash-dot {
+  width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.4);
+  animation: dotPulse 1.2s infinite ease-in-out;
+}
+.splash-dot:nth-child(2) { animation-delay: 0.2s; }
+.splash-dot:nth-child(3) { animation-delay: 0.4s; }
+@keyframes dotPulse { 0%,80%,100% { transform: scale(0.8); opacity: 0.5; } 40% { transform: scale(1.2); opacity: 1; } }
+
+/* ======== AUTH PAGES ======== */
+.auth-page {
+  background: white;
+  padding: 0;
+  min-height: 100vh;
+}
+.auth-header {
+  background: linear-gradient(145deg, #4C1D95, #7C3AED);
+  padding: 56px 24px 40px;
+  color: white;
+  clip-path: ellipse(100% 80% at 50% 0%);
+  padding-bottom: 60px;
+}
+.auth-logo { font-family: var(--font-head); font-size: 28px; font-weight: 800; margin-bottom: 8px; }
+.auth-logo span { color: #F59E0B; }
+.auth-subtitle { font-size: 14px; opacity: 0.8; }
+.auth-body { padding: 32px 24px; flex: 1; }
+.auth-title { font-family: var(--font-head); font-size: 24px; font-weight: 700; margin-bottom: 6px; color: var(--text); }
+.auth-desc { font-size: 14px; color: var(--text2); margin-bottom: 28px; }
+
+/* INPUTS */
+.input-group { margin-bottom: 18px; }
+.input-label { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 8px; display: block; }
+.input-wrap { position: relative; }
+.input-field {
+  width: 100%; padding: 14px 16px;
+  border: 1.5px solid var(--border); border-radius: var(--radius2);
+  font-family: var(--font); font-size: 15px; color: var(--text);
+  background: var(--bg); transition: var(--transition); outline: none;
+}
+.input-field:focus { border-color: var(--primary); background: white; box-shadow: 0 0 0 3px rgba(91,33,182,0.1); }
+.input-icon { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); font-size: 18px; cursor: pointer; }
+.input-prefix { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-size: 15px; font-weight: 600; color: var(--text); }
+.has-prefix { padding-left: 48px; }
+.phone-flag { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+
+/* BUTTONS */
+.btn {
+  width: 100%; padding: 15px;
+  border: none; border-radius: var(--radius2);
+  font-family: var(--font); font-size: 16px; font-weight: 600;
+  cursor: pointer; transition: var(--transition);
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  color: white;
+  box-shadow: 0 4px 16px rgba(91,33,182,0.35);
+}
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(91,33,182,0.45); }
+.btn-primary:active { transform: translateY(0); }
+.btn-outline {
+  background: white; color: var(--primary);
+  border: 1.5px solid var(--primary);
+}
+.btn-google {
+  background: white; color: #374151;
+  border: 1.5px solid var(--border);
+  box-shadow: var(--shadow2);
+}
+.btn-sm { padding: 10px 18px; font-size: 14px; width: auto; }
+.btn-icon { width: 40px; height: 40px; padding: 0; border-radius: 50%; }
+
+/* DIVIDER */
+.divider { display: flex; align-items: center; gap: 12px; margin: 20px 0; }
+.divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.divider span { font-size: 13px; color: var(--text3); white-space: nowrap; }
+
+/* OTP */
+.otp-inputs { display: flex; gap: 12px; justify-content: center; margin: 20px 0; }
+.otp-input {
+  width: 52px; height: 60px;
+  border: 2px solid var(--border); border-radius: var(--radius2);
+  text-align: center; font-size: 24px; font-weight: 700;
+  font-family: var(--font-head); color: var(--primary);
+  background: var(--bg); transition: var(--transition); outline: none;
+}
+.otp-input:focus { border-color: var(--primary); background: white; box-shadow: 0 0 0 3px rgba(91,33,182,0.1); }
+.otp-timer { text-align: center; font-size: 14px; color: var(--text2); margin-bottom: 8px; }
+.otp-timer span { color: var(--primary); font-weight: 600; cursor: pointer; }
+
+/* AUTH LINKS */
+.auth-link { text-align: center; font-size: 14px; color: var(--text2); margin-top: 20px; }
+.auth-link a { color: var(--primary); font-weight: 600; cursor: pointer; text-decoration: none; }
+
+/* ======== TOP HEADER ======== */
+.top-header {
+  position: sticky; top: 0; z-index: 100;
+  background: white;
+  padding: 12px 16px;
+  display: flex; align-items: center; gap: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  min-height: var(--header-h);
+}
+.header-location {
+  flex: 1; cursor: pointer;
+}
+.location-label { font-size: 11px; color: var(--text2); display: flex; align-items: center; gap: 4px; }
+.location-name { font-family: var(--font-head); font-size: 15px; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 4px; }
+.header-actions { display: flex; gap: 8px; align-items: center; }
+.icon-btn {
+  width: 38px; height: 38px;
+  border: none; background: var(--bg); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-size: 18px; transition: var(--transition); position: relative;
+}
+.icon-btn:hover { background: var(--bg2); }
+.badge {
+  position: absolute; top: -2px; right: -2px;
+  background: var(--danger); color: white;
+  font-size: 9px; font-weight: 700;
+  min-width: 16px; height: 16px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center; padding: 0 3px;
+}
+
+/* SEARCH BAR */
+.search-bar {
+  padding: 0 16px 12px;
+  background: white;
+  position: sticky; top: var(--header-h); z-index: 99;
+}
+.search-input-wrap {
+  display: flex; align-items: center; gap: 10px;
+  background: var(--bg); border-radius: var(--radius2);
+  padding: 12px 16px; border: 1.5px solid var(--border);
+  transition: var(--transition);
+}
+.search-input-wrap:focus-within { border-color: var(--primary); background: white; }
+.search-input-wrap input {
+  flex: 1; border: none; background: transparent;
+  font-family: var(--font); font-size: 14px; outline: none; color: var(--text);
+}
+.search-input-wrap input::placeholder { color: var(--text3); }
+
+/* BOTTOM NAV */
+.bottom-nav {
+  position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+  width: 100%; max-width: 480px;
+  background: white; border-top: 1px solid var(--border);
+  display: flex; z-index: 200;
+  padding-bottom: env(safe-area-inset-bottom);
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
+}
+.nav-item {
+  flex: 1; padding: 10px 4px 8px;
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  cursor: pointer; transition: var(--transition); border: none; background: none;
+}
+.nav-icon { font-size: 22px; transition: var(--transition); }
+.nav-label { font-size: 10px; font-weight: 600; color: var(--text3); transition: var(--transition); }
+.nav-item.active .nav-icon { transform: translateY(-2px); }
+.nav-item.active .nav-label { color: var(--primary); }
+
+/* PAGE CONTENT */
+.page-content { flex: 1; overflow-y: auto; padding-bottom: calc(var(--nav-h) + 12px); }
+
+/* ======== HOME ======== */
+/* BANNERS */
+.banner-section { padding: 12px 16px 0; }
+.banner-carousel { display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 8px; -ms-overflow-style: none; scrollbar-width: none; }
+.banner-carousel::-webkit-scrollbar { display: none; }
+.banner-slide {
+  min-width: calc(100% - 32px); scroll-snap-align: start;
+  border-radius: var(--radius); overflow: hidden; position: relative;
+  height: 160px; flex-shrink: 0;
+  background: linear-gradient(135deg, #4C1D95, #7C3AED);
+  display: flex; align-items: center; padding: 20px;
+}
+.banner-slide.b2 { background: linear-gradient(135deg, #065F46, #10B981); }
+.banner-slide.b3 { background: linear-gradient(135deg, #92400E, #F59E0B); }
+.banner-text h3 { font-family: var(--font-head); color: white; font-size: 20px; font-weight: 800; line-height: 1.2; margin-bottom: 6px; }
+.banner-text p { color: rgba(255,255,255,0.8); font-size: 13px; }
+.banner-tag { background: white; color: var(--primary); font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 20px; display: inline-block; margin-top: 8px; }
+.banner-emoji { position: absolute; right: 20px; font-size: 64px; opacity: 0.9; }
+.banner-dots { display: flex; justify-content: center; gap: 6px; padding: 10px 0; }
+.banner-dot { width: 6px; height: 6px; border-radius: 3px; background: var(--border); transition: var(--transition); }
+.banner-dot.active { width: 18px; background: var(--primary); }
+
+/* DELIVERY TIMER */
+.delivery-bar {
+  margin: 0 16px 12px;
+  background: linear-gradient(135deg, #EDE9FE, #DDD6FE);
+  border-radius: var(--radius2); padding: 12px 16px;
+  display: flex; align-items: center; gap: 12px;
+  border: 1px solid rgba(91,33,182,0.15);
+}
+.delivery-bar-icon { font-size: 28px; }
+.delivery-bar-text h4 { font-family: var(--font-head); font-size: 14px; font-weight: 700; color: var(--primary); }
+.delivery-bar-text p { font-size: 12px; color: var(--text2); }
+.delivery-bar-timer {
+  margin-left: auto;
+  background: var(--primary); color: white;
+  font-family: var(--font-head); font-weight: 700; font-size: 13px;
+  padding: 6px 12px; border-radius: 20px;
+}
+
+/* CATEGORIES */
+.section { padding: 0 16px; margin-bottom: 20px; }
+.section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.section-title { font-family: var(--font-head); font-size: 18px; font-weight: 700; color: var(--text); }
+.see-all { font-size: 13px; color: var(--primary); font-weight: 600; cursor: pointer; }
+.cat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.cat-item {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  cursor: pointer; transition: var(--transition);
+}
+.cat-item:hover { transform: translateY(-2px); }
+.cat-icon {
+  width: 64px; height: 64px; border-radius: var(--radius2);
+  display: flex; align-items: center; justify-content: center; font-size: 30px;
+  background: var(--bg2);
+}
+.cat-name { font-size: 11px; font-weight: 600; color: var(--text); text-align: center; line-height: 1.2; }
+
+/* PRODUCTS */
+.products-scroll { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 4px; -ms-overflow-style: none; scrollbar-width: none; }
+.products-scroll::-webkit-scrollbar { display: none; }
+.products-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+
+/* PRODUCT CARD */
+.product-card {
+  background: white; border-radius: var(--radius);
+  box-shadow: var(--shadow2);
+  overflow: hidden; cursor: pointer; transition: var(--transition);
+  flex-shrink: 0; width: 160px;
+  border: 1px solid var(--border);
+}
+.products-grid .product-card { width: 100%; }
+.product-card:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+.product-img {
+  width: 100%; height: 120px;
+  background: var(--bg); position: relative;
+  display: flex; align-items: center; justify-content: center; font-size: 52px;
+}
+.product-badge {
+  position: absolute; top: 8px; left: 8px;
+  background: var(--accent2); color: white;
+  font-size: 9px; font-weight: 700; padding: 3px 7px; border-radius: 10px;
+}
+.product-wish {
+  position: absolute; top: 8px; right: 8px;
+  width: 28px; height: 28px; border-radius: 50%; background: white;
+  display: flex; align-items: center; justify-content: center; font-size: 14px;
+  box-shadow: var(--shadow2); cursor: pointer; transition: var(--transition);
+  border: none;
+}
+.product-wish.active { background: #FEE2E2; }
+.product-info { padding: 10px 10px 12px; }
+.product-name { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.product-weight { font-size: 11px; color: var(--text3); margin-bottom: 8px; }
+.product-price-row { display: flex; align-items: center; justify-content: space-between; }
+.product-price { font-family: var(--font-head); font-size: 16px; font-weight: 700; color: var(--text); }
+.product-mrp { font-size: 11px; color: var(--text3); text-decoration: line-through; }
+.product-discount { font-size: 11px; color: var(--accent2); font-weight: 600; }
+.add-btn {
+  width: 32px; height: 32px; border-radius: 10px;
+  background: var(--primary); color: white; border: none;
+  font-size: 20px; font-weight: 700; cursor: pointer; transition: var(--transition);
+  display: flex; align-items: center; justify-content: center;
+}
+.add-btn:hover { background: var(--primary-dark); transform: scale(1.05); }
+.qty-ctrl { display: flex; align-items: center; gap: 6px; }
+.qty-btn {
+  width: 28px; height: 28px; border-radius: 8px;
+  background: var(--bg2); color: var(--primary); border: none;
+  font-size: 16px; font-weight: 700; cursor: pointer; transition: var(--transition);
+  display: flex; align-items: center; justify-content: center;
+}
+.qty-num { font-family: var(--font-head); font-size: 14px; font-weight: 700; color: var(--text); min-width: 18px; text-align: center; }
+
+/* STORES */
+.store-card {
+  background: white; border-radius: var(--radius);
+  padding: 16px; box-shadow: var(--shadow2);
+  cursor: pointer; transition: var(--transition); border: 1px solid var(--border);
+  display: flex; gap: 14px; align-items: center; margin-bottom: 10px;
+}
+.store-card:hover { transform: translateY(-1px); box-shadow: var(--shadow); }
+.store-logo {
+  width: 60px; height: 60px; border-radius: var(--radius2);
+  background: var(--bg2); display: flex; align-items: center; justify-content: center;
+  font-size: 32px; flex-shrink: 0;
+}
+.store-info { flex: 1; }
+.store-name { font-family: var(--font-head); font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 3px; }
+.store-meta { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text2); flex-wrap: wrap; }
+.store-meta span { display: flex; align-items: center; gap: 3px; }
+.store-badge { font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 8px; }
+.badge-open { background: #D1FAE5; color: #065F46; }
+.badge-closed { background: #FEE2E2; color: #991B1B; }
+
+/* ======== PRODUCT DETAIL ======== */
+.prod-detail-header {
+  position: sticky; top: 0; z-index: 100;
+  background: white; padding: 14px 16px;
+  display: flex; align-items: center; gap: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+.back-btn {
+  width: 38px; height: 38px; border-radius: 50%;
+  background: var(--bg); border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; font-size: 20px;
+}
+.prod-image-hero {
+  width: 100%; height: 260px;
+  background: var(--bg);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 100px;
+}
+.prod-detail-body { padding: 20px 16px; background: white; }
+.prod-detail-name { font-family: var(--font-head); font-size: 22px; font-weight: 800; margin-bottom: 4px; }
+.prod-detail-weight { font-size: 14px; color: var(--text2); margin-bottom: 14px; }
+.prod-price-big { font-family: var(--font-head); font-size: 28px; font-weight: 800; color: var(--primary); }
+.prod-price-mrp { font-size: 16px; color: var(--text3); text-decoration: line-through; margin-left: 8px; }
+.prod-saving { font-size: 13px; color: var(--accent2); font-weight: 600; }
+.prod-delivery-info {
+  margin: 16px 0; padding: 14px;
+  background: var(--bg); border-radius: var(--radius2);
+  display: flex; align-items: center; gap: 12px;
+}
+.prod-action-bar {
+  position: sticky; bottom: var(--nav-h); z-index: 100;
+  background: white; padding: 14px 16px;
+  box-shadow: 0 -4px 16px rgba(0,0,0,0.08);
+  display: flex; align-items: center; gap: 12px;
+}
+.tabs { display: flex; border-bottom: 2px solid var(--border); margin-bottom: 16px; }
+.tab {
+  padding: 10px 16px; font-size: 14px; font-weight: 600; color: var(--text2);
+  cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px;
+  transition: var(--transition);
+}
+.tab.active { color: var(--primary); border-bottom-color: var(--primary); }
+
+/* ======== CART ======== */
+.cart-empty { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; text-align: center; gap: 16px; }
+.cart-empty-icon { font-size: 80px; }
+.cart-empty h3 { font-family: var(--font-head); font-size: 22px; font-weight: 700; }
+.cart-empty p { font-size: 14px; color: var(--text2); }
+.cart-item {
+  background: white; padding: 16px;
+  display: flex; gap: 12px; align-items: center;
+  border-bottom: 1px solid var(--border);
+}
+.cart-item-img {
+  width: 64px; height: 64px; border-radius: var(--radius2);
+  background: var(--bg); display: flex; align-items: center; justify-content: center;
+  font-size: 32px; flex-shrink: 0;
+}
+.cart-item-info { flex: 1; }
+.cart-item-name { font-weight: 600; font-size: 14px; margin-bottom: 2px; }
+.cart-item-wt { font-size: 12px; color: var(--text2); }
+.cart-item-price { font-family: var(--font-head); font-size: 16px; font-weight: 700; margin-top: 4px; }
+.cart-summary {
+  background: white; margin: 12px 16px;
+  border-radius: var(--radius); padding: 16px; box-shadow: var(--shadow2);
+}
+.cart-summary-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; font-size: 14px; }
+.cart-summary-row.total { border-top: 1px dashed var(--border); margin-top: 6px; padding-top: 12px; font-weight: 700; font-size: 16px; }
+.coupon-bar {
+  margin: 0 16px 12px; padding: 14px 16px;
+  background: white; border-radius: var(--radius2); border: 1.5px dashed var(--primary);
+  display: flex; align-items: center; gap: 10px; cursor: pointer;
+}
+.checkout-bar {
+  position: sticky; bottom: var(--nav-h); background: white;
+  padding: 14px 16px; box-shadow: 0 -4px 16px rgba(0,0,0,0.08);
+  display: flex; align-items: center; gap: 12px;
+}
+.cart-total-chip {
+  background: var(--bg2); padding: 8px 14px; border-radius: var(--radius2);
+  font-family: var(--font-head); font-weight: 700; white-space: nowrap;
+}
+
+/* ======== ORDERS ======== */
+.order-card {
+  background: white; margin: 12px 16px; border-radius: var(--radius);
+  box-shadow: var(--shadow2); overflow: hidden; border: 1px solid var(--border);
+  cursor: pointer; transition: var(--transition);
+}
+.order-card:hover { box-shadow: var(--shadow); }
+.order-header {
+  padding: 14px 16px; display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+}
+.order-id { font-family: var(--font-head); font-size: 13px; font-weight: 700; color: var(--primary); }
+.order-status {
+  font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 20px;
+}
+.status-delivered { background: #D1FAE5; color: #065F46; }
+.status-processing { background: #FEF3C7; color: #92400E; }
+.status-out { background: #DBEAFE; color: #1E40AF; }
+.status-cancelled { background: #FEE2E2; color: #991B1B; }
+.order-body { padding: 14px 16px; }
+.order-items-preview { font-size: 13px; color: var(--text2); margin-bottom: 8px; }
+.order-meta { display: flex; align-items: center; justify-content: space-between; font-size: 13px; }
+.order-amount { font-family: var(--font-head); font-weight: 700; font-size: 16px; }
+.order-date { font-size: 12px; color: var(--text3); }
+
+/* TRACKING */
+.tracking-map {
+  height: 200px; background: linear-gradient(135deg, #EDE9FE, #DDD6FE);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 60px; position: relative;
+}
+.tracking-overlay {
+  position: absolute; bottom: 12px; left: 12px; right: 12px;
+  background: white; border-radius: var(--radius2); padding: 12px 16px;
+  box-shadow: var(--shadow); display: flex; align-items: center; gap: 12px;
+}
+.track-steps { padding: 20px 16px; }
+.track-step { display: flex; gap: 16px; margin-bottom: 24px; }
+.track-icon-col { display: flex; flex-direction: column; align-items: center; gap: 0; }
+.track-icon-circle {
+  width: 36px; height: 36px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; flex-shrink: 0;
+}
+.track-icon-circle.done { background: #D1FAE5; }
+.track-icon-circle.current { background: var(--primary); font-size: 18px; }
+.track-icon-circle.pending { background: var(--bg); }
+.track-line { width: 2px; flex: 1; min-height: 20px; background: var(--border); margin: 4px 0; }
+.track-line.done { background: var(--accent2); }
+.track-content { flex: 1; padding-bottom: 20px; }
+.track-title { font-weight: 600; font-size: 14px; margin-bottom: 2px; }
+.track-time { font-size: 12px; color: var(--text3); }
+
+/* ======== PROFILE ======== */
+.profile-hero {
+  background: linear-gradient(145deg, #4C1D95, #7C3AED);
+  padding: 40px 24px 24px;
+  display: flex; flex-direction: column; align-items: center; gap: 12px;
+}
+.avatar {
+  width: 80px; height: 80px; border-radius: 50%;
+  background: rgba(255,255,255,0.2); border: 3px solid rgba(255,255,255,0.4);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 40px; color: white;
+}
+.profile-name { font-family: var(--font-head); color: white; font-size: 20px; font-weight: 700; }
+.profile-phone { color: rgba(255,255,255,0.75); font-size: 14px; }
+.profile-menu { padding: 16px; }
+.menu-section { margin-bottom: 20px; }
+.menu-section-title { font-size: 12px; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px; padding: 0 4px; }
+.menu-item {
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px 16px; background: white; border-radius: var(--radius2);
+  margin-bottom: 6px; cursor: pointer; transition: var(--transition);
+  box-shadow: var(--shadow2); border: 1px solid var(--border);
+}
+.menu-item:hover { background: var(--bg2); }
+.menu-item-icon { width: 36px; height: 36px; border-radius: 10px; background: var(--bg2); display: flex; align-items: center; justify-content: center; font-size: 18px; }
+.menu-item-text { flex: 1; }
+.menu-item-label { font-size: 14px; font-weight: 600; }
+.menu-item-sub { font-size: 12px; color: var(--text2); }
+.menu-item-arrow { color: var(--text3); font-size: 18px; }
+
+/* ======== WALLET ======== */
+.wallet-hero {
+  background: linear-gradient(145deg, #4C1D95, #7C3AED);
+  padding: 32px 24px; text-align: center; color: white;
+}
+.wallet-balance { font-family: var(--font-head); font-size: 44px; font-weight: 800; margin: 8px 0; }
+.wallet-actions { display: flex; gap: 12px; justify-content: center; margin-top: 20px; }
+.wallet-action-btn {
+  background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3);
+  color: white; padding: 10px 20px; border-radius: 20px;
+  font-size: 14px; font-weight: 600; cursor: pointer; transition: var(--transition);
+  display: flex; align-items: center; gap: 6px;
+}
+.txn-item {
+  display: flex; align-items: center; gap: 14px;
+  padding: 16px; background: white; border-bottom: 1px solid var(--border);
+}
+.txn-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+.txn-icon.credit { background: #D1FAE5; }
+.txn-icon.debit { background: #FEE2E2; }
+.txn-info { flex: 1; }
+.txn-title { font-weight: 600; font-size: 14px; }
+.txn-date { font-size: 12px; color: var(--text2); }
+.txn-amount { font-family: var(--font-head); font-weight: 700; font-size: 16px; }
+.txn-amount.credit { color: var(--accent2); }
+.txn-amount.debit { color: var(--danger); }
+
+/* ======== STORE DASHBOARD ======== */
+.store-dash-header {
+  background: linear-gradient(145deg, #064E3B, #059669);
+  padding: 40px 20px 24px; color: white;
+}
+.store-dash-name { font-family: var(--font-head); font-size: 22px; font-weight: 800; }
+.store-dash-meta { font-size: 13px; opacity: 0.8; margin-top: 4px; }
+.store-status-toggle {
+  margin-top: 14px; display: flex; align-items: center; gap: 10px;
+  background: rgba(255,255,255,0.15); padding: 10px 16px; border-radius: 20px;
+  width: fit-content;
+}
+.toggle { width: 44px; height: 24px; border-radius: 12px; background: rgba(255,255,255,0.3); position: relative; cursor: pointer; transition: var(--transition); }
+.toggle.on { background: #34D399; }
+.toggle-knob { width: 20px; height: 20px; border-radius: 50%; background: white; position: absolute; top: 2px; left: 2px; transition: var(--transition); box-shadow: 0 1px 4px rgba(0,0,0,0.2); }
+.toggle.on .toggle-knob { left: 22px; }
+.stats-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 16px; }
+.stat-card { background: white; border-radius: var(--radius); padding: 16px; box-shadow: var(--shadow2); text-align: center; }
+.stat-val { font-family: var(--font-head); font-size: 26px; font-weight: 800; color: var(--primary); }
+.stat-label { font-size: 12px; color: var(--text2); margin-top: 2px; }
+.store-orders { padding: 0 16px; }
+.store-order-item {
+  background: white; border-radius: var(--radius2); padding: 14px 16px;
+  margin-bottom: 10px; box-shadow: var(--shadow2);
+  border-left: 4px solid var(--primary);
+}
+.store-order-item.new { border-left-color: var(--accent); }
+.store-order-item.done { border-left-color: var(--accent2); }
+.store-order-actions { display: flex; gap: 8px; margin-top: 10px; }
+
+/* ======== DELIVERY DASHBOARD ======== */
+.delivery-header {
+  background: linear-gradient(145deg, #1E3A8A, #2563EB);
+  padding: 40px 20px 24px; color: white;
+}
+.delivery-online-toggle { margin-top: 16px; display: flex; align-items: center; gap: 10px; }
+.delivery-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 16px; }
+.delivery-stat { background: white; border-radius: var(--radius2); padding: 14px; text-align: center; box-shadow: var(--shadow2); }
+.delivery-stat .val { font-family: var(--font-head); font-size: 20px; font-weight: 800; color: #2563EB; }
+.delivery-stat .lbl { font-size: 11px; color: var(--text2); }
+.delivery-order {
+  background: white; margin: 8px 16px; border-radius: var(--radius);
+  padding: 16px; box-shadow: var(--shadow2); border: 1px solid var(--border);
+}
+.delivery-order-actions { display: flex; gap: 8px; margin-top: 12px; }
+
+/* ======== ADMIN DASHBOARD ======== */
+.admin-header {
+  background: linear-gradient(145deg, #1F2937, #374151);
+  padding: 40px 20px 24px; color: white;
+}
+.admin-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 16px; }
+.admin-stat { background: white; border-radius: var(--radius); padding: 16px; box-shadow: var(--shadow2); }
+.admin-stat .icon { font-size: 28px; margin-bottom: 8px; }
+.admin-stat .val { font-family: var(--font-head); font-size: 24px; font-weight: 800; color: var(--text); }
+.admin-stat .lbl { font-size: 12px; color: var(--text2); }
+.admin-stat .trend { font-size: 11px; color: var(--accent2); font-weight: 600; margin-top: 2px; }
+.admin-nav { display: flex; flex-wrap: wrap; gap: 10px; padding: 0 16px 16px; }
+.admin-nav-btn {
+  flex: 1; min-width: calc(50% - 5px);
+  background: white; border: 1px solid var(--border);
+  border-radius: var(--radius2); padding: 14px 12px;
+  text-align: center; cursor: pointer; transition: var(--transition);
+  box-shadow: var(--shadow2);
+}
+.admin-nav-btn:hover { background: var(--bg2); border-color: var(--primary); }
+.admin-nav-btn .icon { font-size: 24px; margin-bottom: 4px; }
+.admin-nav-btn .lbl { font-size: 12px; font-weight: 600; color: var(--text); }
+
+/* ======== CHECKOUT ======== */
+.checkout-section { padding: 16px; }
+.checkout-section + .checkout-section { border-top: 8px solid var(--bg); }
+.checkout-section h3 { font-family: var(--font-head); font-size: 17px; font-weight: 700; margin-bottom: 14px; }
+.address-card {
+  background: var(--bg); border-radius: var(--radius2); padding: 14px;
+  border: 1.5px solid var(--border); cursor: pointer; margin-bottom: 10px; transition: var(--transition);
+}
+.address-card.selected { border-color: var(--primary); background: var(--bg2); }
+.payment-opt {
+  display: flex; align-items: center; gap: 14px;
+  background: white; border: 1.5px solid var(--border);
+  border-radius: var(--radius2); padding: 14px; cursor: pointer;
+  margin-bottom: 10px; transition: var(--transition);
+}
+.payment-opt.selected { border-color: var(--primary); background: var(--bg2); }
+.payment-icon { width: 40px; height: 40px; border-radius: 10px; background: var(--bg); display: flex; align-items: center; justify-content: center; font-size: 22px; }
+.radio-dot { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; margin-left: auto; transition: var(--transition); }
+.payment-opt.selected .radio-dot { border-color: var(--primary); }
+.radio-dot::after { content: ''; width: 10px; height: 10px; border-radius: 50%; background: var(--primary); transform: scale(0); transition: var(--transition); }
+.payment-opt.selected .radio-dot::after { transform: scale(1); }
+
+/* ======== WISHLIST ======== */
+.wishlist-empty { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; padding: 40px; text-align: center; }
+.wishlist-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 16px; }
+
+/* ======== TOAST ======== */
+.toast-container { position: fixed; top: 80px; left: 50%; transform: translateX(-50%); z-index: 9999; width: calc(100% - 32px); max-width: 448px; pointer-events: none; }
+.toast {
+  background: #1E1B4B; color: white; border-radius: var(--radius2);
+  padding: 14px 18px; margin-bottom: 8px; font-size: 14px; font-weight: 500;
+  display: flex; align-items: center; gap: 10px;
+  animation: toastIn 0.3s cubic-bezier(0.34,1.56,0.64,1);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  pointer-events: all;
+}
+.toast.success { background: #065F46; }
+.toast.error { background: #991B1B; }
+.toast.warning { background: #92400E; }
+@keyframes toastIn { from { transform: translateY(-20px); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes toastOut { from { transform: none; opacity: 1; } to { transform: translateY(-20px); opacity: 0; } }
+
+/* MODAL */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+  z-index: 500; display: flex; align-items: flex-end;
+  animation: fadeIn 0.2s ease;
+}
+.modal-overlay.centered { align-items: center; padding: 20px; }
+.modal {
+  background: white; width: 100%; border-radius: var(--radius) var(--radius) 0 0;
+  padding: 20px; animation: slideUp 0.3s cubic-bezier(0.34,1.56,0.64,1);
+  max-height: 90vh; overflow-y: auto;
+}
+.modal.centered { border-radius: var(--radius); animation: popIn 0.3s cubic-bezier(0.34,1.56,0.64,1); }
+@keyframes slideUp { from { transform: translateY(100%); } to { transform: none; } }
+@keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: none; opacity: 1; } }
+.modal-handle { width: 40px; height: 4px; border-radius: 2px; background: var(--border); margin: 0 auto 16px; }
+.modal-title { font-family: var(--font-head); font-size: 18px; font-weight: 700; margin-bottom: 16px; }
+
+/* SKELETON */
+.skeleton { background: linear-gradient(90deg, var(--bg) 25%, var(--bg2) 50%, var(--bg) 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: var(--radius2); }
+@keyframes shimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+.skel-product { height: 220px; margin: 8px 0; }
+.skel-banner { height: 160px; border-radius: var(--radius); }
+.skel-text { height: 14px; border-radius: 7px; margin: 6px 0; }
+
+/* RATINGS */
+.stars { display: flex; gap: 2px; color: #F59E0B; font-size: 14px; }
+.stars .empty { color: var(--border); }
+.review-card { padding: 16px; border-bottom: 1px solid var(--border); }
+.review-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.review-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--bg2); display: flex; align-items: center; justify-content: center; font-size: 18px; }
+.review-name { font-weight: 600; font-size: 14px; }
+.review-date { font-size: 12px; color: var(--text3); }
+.review-text { font-size: 14px; color: var(--text2); line-height: 1.5; }
+
+/* ======== CATEGORIES PAGE ======== */
+.cat-sidebar { width: 88px; background: white; min-height: calc(100vh - var(--header-h) - var(--nav-h)); border-right: 1px solid var(--border); flex-shrink: 0; overflow-y: auto; }
+.cat-sidebar-item {
+  padding: 14px 8px; text-align: center; cursor: pointer;
+  transition: var(--transition); font-size: 11px; font-weight: 600;
+  color: var(--text2); border-left: 3px solid transparent;
+}
+.cat-sidebar-item.active { color: var(--primary); background: var(--bg2); border-left-color: var(--primary); }
+.cat-sidebar-icon { font-size: 26px; margin-bottom: 4px; }
+.cat-products-area { flex: 1; overflow-y: auto; padding: 16px 12px; }
+.cat-page-layout { display: flex; flex: 1; overflow: hidden; }
+
+/* NOTIFICATION */
+.notif-item {
+  display: flex; gap: 14px; padding: 16px;
+  border-bottom: 1px solid var(--border); cursor: pointer; transition: var(--transition);
+}
+.notif-item:hover { background: var(--bg); }
+.notif-item.unread { background: #F5F3FF; }
+.notif-icon { width: 44px; height: 44px; border-radius: 50%; background: var(--bg2); display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
+.notif-text { flex: 1; }
+.notif-title { font-weight: 600; font-size: 14px; margin-bottom: 2px; }
+.notif-msg { font-size: 13px; color: var(--text2); line-height: 1.4; }
+.notif-time { font-size: 11px; color: var(--text3); margin-top: 4px; }
+.notif-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--primary); flex-shrink: 0; margin-top: 6px; }
+
+/* ROLE SELECTOR */
+.role-selector { display: flex; flex-direction: column; gap: 12px; padding: 24px 24px; }
+.role-card {
+  background: white; border-radius: var(--radius); padding: 20px;
+  box-shadow: var(--shadow2); border: 2px solid var(--border);
+  cursor: pointer; transition: var(--transition);
+  display: flex; align-items: center; gap: 16px;
+}
+.role-card:hover { border-color: var(--primary); background: var(--bg2); transform: translateY(-1px); }
+.role-icon { font-size: 40px; }
+.role-label { font-family: var(--font-head); font-size: 18px; font-weight: 700; }
+.role-sub { font-size: 13px; color: var(--text2); }
+
+/* COUPON CARD */
+.coupon-card {
+  background: white; border-radius: var(--radius); overflow: hidden;
+  box-shadow: var(--shadow2); margin-bottom: 12px; border: 1px solid var(--border);
+  display: flex;
+}
+.coupon-left { width: 80px; background: var(--primary); display: flex; align-items: center; justify-content: center; color: white; font-size: 28px; flex-shrink: 0; }
+.coupon-right { padding: 14px 16px; flex: 1; }
+.coupon-code { font-family: var(--font-head); font-size: 16px; font-weight: 800; color: var(--primary); border: 1.5px dashed var(--primary); padding: 3px 10px; border-radius: var(--radius3); display: inline-block; margin-bottom: 6px; }
+.coupon-desc { font-size: 13px; color: var(--text2); }
+.coupon-valid { font-size: 11px; color: var(--text3); margin-top: 6px; }
+.coupon-apply { font-size: 13px; font-weight: 700; color: var(--primary); cursor: pointer; margin-top: 8px; display: inline-block; }
+
+/* ADDRESS */
+.address-type-chips { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+.chip {
+  padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 600;
+  border: 1.5px solid var(--border); color: var(--text2); cursor: pointer; transition: var(--transition);
+}
+.chip.active { border-color: var(--primary); color: var(--primary); background: var(--bg2); }
+
+/* ======== PINCODE CHECK ======== */
+.pincode-banner {
+  margin: 12px 16px; padding: 16px;
+  background: linear-gradient(135deg, #FEF3C7, #FDE68A);
+  border-radius: var(--radius2); border: 1px solid #F59E0B;
+  display: flex; align-items: center; gap: 12px;
+}
+
+/* RESPONSIVE TWEAKS */
+@media (max-width: 380px) {
+  .cat-grid { grid-template-columns: repeat(4, 1fr); gap: 6px; }
+  .cat-icon { width: 56px; height: 56px; }
+  .products-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* OFFERS STRIP */
+.offers-strip { display: flex; gap: 8px; overflow-x: auto; padding: 0 16px 12px; -ms-overflow-style: none; scrollbar-width: none; }
+.offers-strip::-webkit-scrollbar { display: none; }
+.offer-chip {
+  display: flex; align-items: center; gap: 6px; white-space: nowrap;
+  background: white; border: 1.5px solid var(--primary); border-radius: 20px;
+  padding: 6px 12px; font-size: 12px; font-weight: 600; color: var(--primary); flex-shrink: 0;
+  cursor: pointer; transition: var(--transition);
+}
+.offer-chip:hover { background: var(--bg2); }
+
+/* SECTION NAV TABS */
+.section-tabs { display: flex; gap: 8px; overflow-x: auto; padding: 0 16px 12px; -ms-overflow-style: none; scrollbar-width: none; }
+.section-tabs::-webkit-scrollbar { display: none; }
+.section-tab {
+  white-space: nowrap; padding: 8px 16px; border-radius: 20px;
+  font-size: 13px; font-weight: 600; border: 1.5px solid var(--border);
+  background: white; color: var(--text2); cursor: pointer; flex-shrink: 0; transition: var(--transition);
+}
+.section-tab.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+/* SEARCH RESULTS */
+.search-results { padding: 12px 16px; }
+.search-results h3 { font-family: var(--font-head); font-size: 16px; font-weight: 700; margin-bottom: 12px; }
+
+/* PROGRESS BAR */
+.progress-bar { height: 4px; background: var(--bg2); border-radius: 2px; overflow: hidden; margin: 8px 0; }
+.progress-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--primary-light)); border-radius: 2px; transition: width 0.5s ease; }
+
+/* EMPTY STATES */
+.empty-state { text-align: center; padding: 60px 32px; }
+.empty-state .icon { font-size: 72px; margin-bottom: 16px; }
+.empty-state h3 { font-family: var(--font-head); font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+.empty-state p { font-size: 14px; color: var(--text2); margin-bottom: 20px; }
+
+/* IMAGE/FOOD EMOJI BG */
+.bg-purple { background: #EDE9FE; }
+.bg-green { background: #D1FAE5; }
+.bg-orange { background: #FEF3C7; }
+.bg-pink { background: #FCE7F3; }
+.bg-blue { background: #DBEAFE; }
+.bg-red { background: #FEE2E2; }
+
+/* EARNINGS CHART PLACEHOLDER */
+.earnings-chart {
+  height: 120px; background: var(--bg);
+  border-radius: var(--radius2); margin: 12px 0;
+  display: flex; align-items: flex-end; gap: 6px; padding: 16px 12px 0;
+}
+.chart-bar {
+  flex: 1; border-radius: 4px 4px 0 0;
+  background: linear-gradient(180deg, var(--primary-light), var(--primary));
+  min-height: 10px; transition: height 0.5s ease;
+}
+
+/* LIVE LOCATION PULSE */
+.live-dot {
+  width: 12px; height: 12px; border-radius: 50%; background: #10B981;
+  position: relative; display: inline-block;
+}
+.live-dot::after {
+  content: ''; position: absolute; inset: -4px;
+  border-radius: 50%; border: 2px solid #10B981;
+  animation: pulse 1.5s infinite; opacity: 0;
+}
+@keyframes pulse { from { transform: scale(0.8); opacity: 0.8; } to { transform: scale(1.6); opacity: 0; } }
+
+/* FAB */
+.fab {
+  position: fixed; bottom: calc(var(--nav-h) + 16px); right: 16px;
+  width: 52px; height: 52px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  color: white; font-size: 24px; border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 20px rgba(91,33,182,0.4); transition: var(--transition);
+  z-index: 100;
+}
+.fab:hover { transform: scale(1.05); }
+.fab.hidden { display: none; }
+</style>
+</head>
+<body>
+
+<!-- TOAST CONTAINER -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- FAB CART -->
+<button class="fab hidden" id="fabCart" onclick="showPage('page-cart')">🛒<span class="badge" id="fabBadge">0</span></button>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav hidden" id="bottomNav">
+  <button class="nav-item active" onclick="navTo('home')" id="nav-home">
+    <span class="nav-icon">🏠</span>
+    <span class="nav-label">Home</span>
+  </button>
+  <button class="nav-item" onclick="navTo('categories')" id="nav-categories">
+    <span class="nav-icon">📦</span>
+    <span class="nav-label">Categories</span>
+  </button>
+  <button class="nav-item" onclick="navTo('orders')" id="nav-orders">
+    <span class="nav-icon">📋</span>
+    <span class="nav-label">Orders</span>
+  </button>
+  <button class="nav-item" onclick="navTo('wishlist')" id="nav-wishlist">
+    <span class="nav-icon">❤️</span>
+    <span class="nav-label">Wishlist</span>
+  </button>
+  <button class="nav-item" onclick="navTo('profile')" id="nav-profile">
+    <span class="nav-icon">👤</span>
+    <span class="nav-label">Profile</span>
+  </button>
+</nav>
+
+<!-- ============================================================ -->
+<!-- PAGE: SPLASH -->
+<!-- ============================================================ -->
+<div id="page-splash" class="page active">
+  <div class="splash-logo">
+    <div class="splash-icon">⚡</div>
+    <div class="splash-name">Flashly<span>Home</span></div>
+    <div class="splash-tag">Village grocery in 10-30 minutes</div>
+    <div class="splash-loader">
+      <div class="splash-dot"></div>
+      <div class="splash-dot"></div>
+      <div class="splash-dot"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE: ROLE SELECT -->
+<!-- ============================================================ -->
+<div id="page-role" class="page" style="background:white;">
+  <div class="auth-header" style="clip-path:none; padding-bottom:32px;">
+    <div class="auth-logo">Flashly<span>Home</span></div>
+    <div class="auth-subtitle">Who are you?</div>
+  </div>
+  <div style="padding:24px 20px 8px;">
+    <div class="auth-title">Choose your role</div>
+    <div class="auth-desc">Select how you want to use FlashlyHome</div>
+  </div>
+  <div class="role-selector">
+    <div class="role-card" onclick="selectRole('customer')">
+      <span class="role-icon">🛒</span>
+      <div>
+        <div class="role-label">Customer</div>
+        <div class="role-sub">Order groceries from local stores</div>
+      </div>
+      <span style="margin-left:auto; color:var(--text3);">›</span>
+    </div>
+    <div class="role-card" onclick="selectRole('store')">
+      <span class="role-icon">🏪</span>
+      <div>
+        <div class="role-label">Store Owner</div>
+        <div class="role-sub">Manage your kirana store</div>
+      </div>
+      <span style="margin-left:auto; color:var(--text3);">›</span>
+    </div>
+    <div class="role-card" onclick="selectRole('delivery')">
+      <span class="role-icon">🛵</span>
+      <div>
+        <div class="role-label">Delivery Partner</div>
+        <div class="role-sub">Deliver and earn money</div>
+      </div>
+      <span style="margin-left:auto; color:var(--text3);">›</span>
+    </div>
+    <div class="role-card" onclick="selectRole('admin')">
+      <span class="role-icon">⚙️</span>
+      <div>
+        <div class="role-label">Admin</div>
+        <div class="role-sub">Manage the entire platform</div>
+      </div>
+      <span style="margin-left:auto; color:var(--text3);">›</span>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE: LOGIN -->
+<!-- ============================================================ -->
+<div id="page-login" class="page auth-page">
+  <div class="auth-header">
+    <div class="auth-logo">Flashly<span>Home</span></div>
+    <div class="auth-subtitle">Village grocery in minutes ⚡</div>
+  </div>
+  <div class="auth-body">
+    <div class="auth-title">Welcome back!</div>
+    <div class="auth-desc">Login to order from local kirana stores</div>
+
+    <div class="divider"><span>or login with phone</span></div>
+
+    <div class="input-group">
+      <label class="input-label">Mobile Number</label>
+      <div class="input-wrap">
+        <span class="input-prefix">🇮🇳 +91 </span>
+        <input type="tel" class="input-field has-prefix" id="loginPhone" placeholder="Enter 10-digit number" maxlength="10" pattern="[0-9]{10}">
+      </div>
+    </div>
+   <button class="btn btn-primary"
+        onclick="sendOTP()"
+        style="margin-bottom:16px;">
+  Send OTP ›
+</button>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE: OTP VERIFICATION -->
+<!-- ============================================================ -->
+<div id="page-otp" class="page auth-page">
+  <div class="auth-header">
+    <div class="auth-logo">Flashly<span>Home</span></div>
+    <div class="auth-subtitle">Verification</div>
+  </div>
+  <div class="auth-body">
+    <div class="auth-title">Enter OTP</div>
+    <div class="auth-desc" id="otpDesc">We've sent a 6-digit OTP to your mobile number</div>
+
+    <div class="otp-inputs">
+      <input type="tel" class="otp-input" maxlength="1" id="otp1" onkeyup="otpNext(this,'otp2')">
+      <input type="tel" class="otp-input" maxlength="1" id="otp2" onkeyup="otpNext(this,'otp3')">
+      <input type="tel" class="otp-input" maxlength="1" id="otp3" onkeyup="otpNext(this,'otp4')">
+      <input type="tel" class="otp-input" maxlength="1" id="otp4" onkeyup="otpNext(this,'otp5')">
+      <input type="tel" class="otp-input" maxlength="1" id="otp5" onkeyup="otpNext(this,'otp6')">
+      <input type="tel" class="otp-input" maxlength="1" id="otp6" onkeyup="otpNext(this,null)">
+    </div>
+
+    <div class="otp-timer">Didn't receive? <span id="otpResend" onclick="resendOTP()">Resend in <span id="otpCountdown">30</span>s</span></div>
+
+    <button class="btn btn-primary" onclick="verifyOTP()">Verify & Continue</button>
+
+    <div class="auth-link" style="margin-top:12px;">
+    <a href="javascript:void(0)"
+   onclick="
+      document.getElementById('page-otp').classList.remove('active');
+      document.getElementById('page-login').classList.add('active');
+   ">
+   ← Change number
+</a>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE: HOME -->
+<!-- ============================================================ -->
+<div id="page-home" class="page">
+  <!-- Header -->
+  <div class="top-header">
+    <div class="header-location" onclick="showLocationModal()">
+      <div class="location-label">📍 Delivering to</div>
+      <div class="location-name" id="currentLocation">Rampur Village, UP <span style="color:var(--primary); font-size:16px;">▾</span></div>
+    </div>
+    <div class="header-actions">
+      <button class="icon-btn" onclick="showPage('page-notifications')">🔔<span class="badge" id="notifBadge">3</span></button>
+      <button class="icon-btn" onclick="showPage('page-cart')">🛒<span class="badge" id="cartBadge">0</span></button>
+    </div>
+  </div>
+
+  <!-- Search -->
+  <div class="search-bar">
+    <div class="search-input-wrap" onclick="focusSearch()">
+      <span>🔍</span>
+      <input type="text" id="searchInput" placeholder="Search rice, dal, vegetables..." onkeyup="handleSearch(this.value)">
+      <span style="color:var(--text3); font-size:12px;">⌘K</span>
+    </div>
+  </div>
+
+  <!-- Page Content -->
+  <div class="page-content" id="homeContent">
+    <!-- Pincode Banner -->
+    <div class="pincode-banner">
+      <span style="font-size:24px;">📍</span>
+      <div>
+        <div style="font-size:13px; font-weight:700; color:#92400E;">Serving Rampur & nearby villages</div>
+        <div style="font-size:12px; color:#78350F;">PIN: 243601 · Stores within 20 KM radius</div>
+      </div>
+      <button class="btn btn-sm" style="background:#F59E0B; color:white; border:none; margin-left:auto; padding:8px 12px; font-size:12px;" onclick="checkPincode()">Change PIN</button>
+    </div>
+
+    <!-- Delivery Timer -->
+    <div class="delivery-bar">
+      <div class="delivery-bar-icon">⚡</div>
+      <div class="delivery-bar-text">
+        <h4>Express Delivery Active</h4>
+        <p>Fresh groceries from your local store</p>
+      </div>
+      <div class="delivery-bar-timer" id="deliverTimer">15 min</div>
+    </div>
+
+    <!-- Offers Strip -->
+    <div class="offers-strip">
+      <div class="offer-chip">🎁 FIRST50 - 50% off</div>
+      <div class="offer-chip">🚚 Free delivery ₹200+</div>
+      <div class="offer-chip">💰 10% cashback</div>
+      <div class="offer-chip">🌾 Fresh produce daily</div>
+      <div class="offer-chip">⭐ 5★ stores only</div>
+    </div>
+
+    <!-- Banner Carousel -->
+    <div class="banner-section">
+      <div class="banner-carousel" id="bannerCarousel">
+        <div class="banner-slide">
+          <div class="banner-text">
+            <h3>Fresh Veggies<br>Daily Harvest</h3>
+            <p>Farm to your door</p>
+            <span class="banner-tag">UP TO 40% OFF</span>
+          </div>
+          <div class="banner-emoji">🥦</div>
+        </div>
+        <div class="banner-slide b2">
+          <div class="banner-text">
+            <h3>Free Delivery<br>Above ₹200</h3>
+            <p>All local stores</p>
+            <span class="banner-tag" style="color:#065F46;">ORDER NOW</span>
+          </div>
+          <div class="banner-emoji">🛵</div>
+        </div>
+        <div class="banner-slide b3">
+          <div class="banner-text">
+            <h3>Diwali Special<br>Dry Fruits</h3>
+            <p>Premium quality</p>
+            <span class="banner-tag" style="color:#92400E;">SAVE ₹150</span>
+          </div>
+          <div class="banner-emoji">🎁</div>
+        </div>
+      </div>
+      <div class="banner-dots">
+        <div class="banner-dot active" id="dot0"></div>
+        <div class="banner-dot" id="dot1"></div>
+        <div class="banner-dot" id="dot2"></div>
+      </div>
+    </div>
+
+    <!-- Categories -->
+    <div class="section" style="margin-top:16px;">
+      <div class="section-header">
+        <div class="section-title">Shop by Category</div>
+        <span class="see-all" onclick="navTo('categories')">See all</span>
+      </div>
+      <div class="cat-grid" id="categoryGrid"></div>
+    </div>
+
+    <!-- Featured Products -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-title">🔥 Best Sellers</div>
+        <span class="see-all">See all</span>
+      </div>
+      <div class="products-scroll" id="bestSellers"></div>
+    </div>
+
+    <!-- Nearby Stores -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-title">🏪 Nearby Kirana Stores</div>
+        <span class="see-all">See all</span>
+      </div>
+      <div id="storesList"></div>
+    </div>
+
+    <!-- Fresh Veggies -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-title">🥦 Fresh Vegetables</div>
+        <span class="see-all">See all</span>
+      </div>
+      <div class="products-scroll" id="vegProducts"></div>
+    </div>
+
+    <!-- Dairy -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-title">🥛 Dairy & Eggs</div>
+        <span class="see-all">See all</span>
+      </div>
+      <div class="products-scroll" id="dairyProducts"></div>
+    </div>
+
+    <!-- Search Results (Hidden by default) -->
+    <div id="searchResultsArea" class="hidden">
+      <div class="search-results">
+        <h3 id="searchResultsTitle">Search Results</h3>
+        <div class="products-grid" id="searchResultsGrid"></div>
+        <div id="noResults" class="empty-state hidden">
+          <div class="icon">🔍</div>
+          <h3>No products found</h3>
+          <p>Try different keywords or check nearby stores</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE: CATEGORIES -->
+<!-- ============================================================ -->
+<div id="page-categories" class="page">
+  <div class="top-header">
+    <div style="font-family:var(--font-head); font-size:18px; font-weight:700;">All Categories</div>
+  </div>
+  <div class="cat-page-layout">
+    <div class="cat-sidebar" id="catSidebar"></div>
+    <div class="cat-products-area" id="catProductsArea">
+      <div class="products-grid" id="catProductsGrid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE: PRODUCT DETAIL -->
+<!-- ============================================================ -->
+<div id="page-product" class="page">
+  <div class="prod-detail-header">
+    <button class="back-btn" onclick="history.back()">←</button>
+    <div style="flex:1; font-family:var(--font-head); font-size:16px; font-weight:700;" id="prodDetailHeaderName">Product</div>
+    <button class="icon-btn" onclick="toggleWishlistItem(currentProduct)">❤️</button>
+    <button class="icon-btn" onclick="shareProduct()">🔗</button>
+  </div>
+  <div class="page-content">
+    <div class="prod-image-hero" id="prodDetailImg">🥑</div>
+    <div id="prodDetailBadge" style="display:none; margin:-16px 16px 0; position:relative; z-index:1;"></div>
+    <div class="prod-detail-body">
+      <div class="prod-detail-name" id="prodDetailName">Product Name</div>
+      <div class="prod-detail-weight" id="prodDetailWeight">500g</div>
+      <div style="display:flex; align-items:baseline; gap:8px; margin-bottom:6px;">
+        <span class="prod-price-big" id="prodDetailPrice">₹50</span>
+        <span class="prod-price-mrp" id="prodDetailMRP">₹65</span>
+        <span class="prod-saving" id="prodDetailSaving">Save ₹15</span>
+      </div>
+      <div class="stars" id="prodDetailStars" style="margin-bottom:16px;">⭐⭐⭐⭐⭐</div>
+      <div class="prod-delivery-info">
+        <span style="font-size:24px;">⚡</span>
+        <div>
+          <div style="font-weight:600; font-size:14px;">Delivery in 15-20 mins</div>
+          <div style="font-size:12px; color:var(--text2);">From <span id="prodDetailStore">Village Store</span></div>
+        </div>
+      </div>
+      <div class="tabs">
+        <div class="tab active" onclick="switchTab(this,'prodDesc')">Description</div>
+        <div class="tab" onclick="switchTab(this,'prodNutrition')">Nutrition</div>
+        <div class="tab" onclick="switchTab(this,'prodReviews')">Reviews</div>
+      </div>
+      <div id="prodDesc">
+        <p style="font-size:14px; color:var(--text2); line-height:1.6;" id="prodDetailDesc">Fresh, farm-sourced product. High quality guaranteed.</p>
+      </div>
+      <div id="prodNutrition" class="hidden">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; font-size:13px;">
+          <div style="background:var(--bg); padding:12px; border-radius:var(--radius2);">
+            <div style="color:var(--text2);">Calories</div>
+            <div style="font-weight:700; font-size:16px;">52 kcal</div>
+          </div>
+          <div style="background:var(--bg); padding:12px; border-radius:var(--radius2);">
+            <div style="color:var(--text2);">Protein</div>
+            <div style="font-weight:700; font-size:16px;">0.7g</div>
+          </div>
+          <div style="background:var(--bg); padding:12px; border-radius:var(--radius2);">
+            <div style="color:var(--text2);">Carbs</div>
+            <div style="font-weight:700; font-size:16px;">14g</div>
+          </div>
+          <div style="background:var(--bg); padding:12px; border-radius:var(--radius2);">
+            <div style="color:var(--text2);">Fat</div>
+            <div style="font-weight:700; font-size:16px;">0.2g</div>
+          </div>
+        </div>
+      </div>
+      <div id="prodReviews" class="hidden">
+        <div class="review-card">
+          <div class="review-header">
+            <div class="review-avatar">👩</div>
+            <div>
+              <div class="review-name">Priya Sharma</div>
+              <div class="stars">⭐⭐⭐⭐⭐</div>
+            </div>
+            <div class="review-date" style="margin-left:auto;">2 days ago</div>
+          </div>
+          <div class="review-text">Very fresh and delivered quickly. Will order again!</div>
+        </div>
+        <div class="review-card">
+          <div class="review-header">
+            <div class="review-avatar">👨</div>
+            <div>
+              <div class="review-name">Rajesh Kumar</div>
+              <div class="stars">⭐⭐⭐⭐<span class="empty">⭐</span></div>
+            </div>
+            <div class="review-date" style="margin-left:auto;">1 week ago</div>
+          </div>
+          <div class="review-text">Good quality. Packaging could be better.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="prod-action-bar">
+    <div id="prodCartCtrl">
+      <button class="btn btn-primary" onclick="addToCartFromDetail()" style="padding:14px 24px; width:auto;">Add to Cart</button>
+    </div>
+    <button class="btn btn-primary" style="flex:1;" onclick="buyNow()">Buy Now →</button>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE: CART -->
+<!-- ============================================================ -->
+<div id="page-cart" class="page">
+  <div class="top-header">
+    <button class="back-btn" onclick="goBack()">←</button>
+    <div style="flex:1; font-family:var(--font-head); font-size:18px; font-weight:700;">My Cart</div>
+    <button class="icon-btn" onclick="clearCart()" style="font-size:14px; background:none; border:none; color:var(--danger); font-weight:600; width:auto; padding:8px;">Clear</button>
+  </div>
+  <div id="cartEmpty" class="cart-empty">
+    <div class="cart-empty-icon">🛒</div>
+    <h3>Cart is empty!</h3>
+    <p>Add items from local kirana stores</p>
+    <button class="btn btn-primary" style="width:auto; padding:12px 24px;" onclick="navTo('home')">Start Shopping</button>
+  </div>
+  <div id="cartFilled" class="hidden">
+    <div class="page-content" id="cartItemsArea"></div>
+    <div class="coupon-bar" onclick="showCouponModal()">
+      <span style="font-size:20px;">🏷️</span>
+      <div>
+        <div style="font-weight:600; font-size:14px;" id="couponText">Apply Coupon / Promo Code</div>
+        <div style="font-size:12px; color:var(--text2);" id="couponSaved"></div>
+      </div>
+      <span style="margin-left:auto; color:var(--primary); font-weight:700;">›</span>
+    </div>
+    <div class="cart-summary">
+      <div class="cart-summary-row"><span>Item Total</span><span id="cartItemTotal">₹0</span></div>
+      <div class="cart-summary-row"><span>Delivery Fee</span><span id="cartDelivery" style="color:var(--accent2);">₹20</span></div>
+      <div class="cart-summary-row"><span>Platform Fee</span><span>₹5</span></div>
+      <div class="cart-summary-row" id="cartDiscountRow" style="display:none; color:var(--accent2);"><span>Discount Applied</span><span id="cartDiscount">-₹0</span></div>
+      <div class="cart-summary-row total"><span>Total</span><span id="cartTotal">₹0</span></div>
+    </div>
+    <div style="height:20px;"></div>
+    <div class="checkout-bar">
+      <div class="cart-total-chip" id="cartTotalChip">₹0 total</div>
+      <button class="btn btn-primary" style="flex:1;" onclick="showPage('page-checkout')">Proceed to Checkout →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE: CHECKOUT -->
+<!-- ============================================================ -->
+<div id="page-checkout" class="page">
+  <div class="top-header">
+    <button class="back-btn" onclick="goBack()">←</button>
+    <div style="flex:1; font-family:var(--font-head); font-size:18px; font-weight:700;">Checkout</div>
+  </div>
+  <div class="page-content">
+    <!-- Delivery Address -->
+    <div class="checkout-section">
+      <h3>📍 Delivery Address</h3>
+      <div class="address-card selected">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+          <div style="font-weight:700; font-size:14px;">🏠 Home</div>
+          <span style="font-size:12px; color:var(--primary); font-weight:600; cursor:pointer;" onclick="showAddressModal()">Change</span>
+        </div>
+        <div style="font-size:13px; color:var(--text2); margin-top:4px; line-height:1.5;">123, Village Road, Rampur, Uttar Pradesh - 243601</div>
+        <div style="font-size:12px; color:var(--text3); margin-top:4px;">📞 +91 98765 43210</div>
+      </div>
+      <div style="font-size:13px; color:var(--accent2); font-weight:600; display:flex; align-items:center; gap:6px;">
+        ⚡ Estimated delivery: <strong>15-25 minutes</strong>
+      </div>
+    </div>
+
+    <!-- Order Summary -->
+    <div class="checkout-section">
+      <h3>🛒 Order Summary</h3>
+      <div id="checkoutItems"></div>
+    </div>
+
+    <!-- Payment Method -->
+    <div class="checkout-section">
+      <h3>💳 Payment Method</h3>
+      <div class="payment-opt selected" onclick="selectPayment(this)" data-method="cod">
+        <div class="payment-icon">💵</div>
+        <div>
+          <div style="font-weight:600; font-size:14px;">Cash on Delivery</div>
+          <div style="font-size:12px; color:var(--text2);">Pay when delivered</div>
+        </div>
+        <div class="radio-dot"></div>
+      </div>
+      <div class="payment-opt" onclick="selectPayment(this)" data-method="razorpay">
+        <div class="payment-icon">💳</div>
+        <div>
+          <div style="font-weight:600; font-size:14px;">Razorpay</div>
+          <div style="font-size:12px; color:var(--text2);">UPI, Cards, Net Banking</div>
+        </div>
+        <div class="radio-dot"></div>
+      </div>
+      <div class="payment-opt" onclick="selectPayment(this)" data-method="wallet">
+        <div class="payment-icon">👛</div>
+        <div>
+          <div style="font-weight:600; font-size:14px;">Flashly Wallet</div>
+          <div style="font-size:12px; color:var(--text2);">Balance: ₹<span id="walletBalance">250</span></div>
+        </div>
+        <div class="radio-dot"></div>
+      </div>
+    </div>
+
+    <!-- Bill Summary -->
+    <div class="checkout-section">
+      <h3>🧾 Bill Details</h3>
+      <div style="font-size:14px;">
+        <div style="display:flex; justify-content:space-between; padding:6px 0;"><span>Item Total</span><span id="coItemTotal">₹0</span></div>
+        <div style="display:flex; justify-content:space-between; padding:6px 0;"><span>Delivery Fee</span><span style="color:var(--accent2);" id="coDelivery">₹20</span></div>
+        <div style="display:flex; justify-content:space-between; padding:6px 0;"><span>Platform Fee</span><span>₹5</span></div>
+        <div style="display:flex; justify-content:space-between; padding:8px 0; font-weight:700; font-size:16px; border-top:1px dashed var(--border); margin-top:4px;"><span>Grand Total</span><span id="coGrandTotal">₹0</span></div>
+      </div>
+    </div>
+
+    <div style="height:80px;"></div>
+  </div>
+  <div style="position:sticky; bottom:var(--nav-h); background:white; padding:14px 16px; box-shadow:0 -4px 16px rgba(0,0,0,0.08);">
+    <button class="btn btn-primary" onclick="placeOrder()">Place Order · <span id="coTotalBtn">₹0</span></button>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE: ORDERS -->
+<!-- ============================================================ -->
+<div id="page-orders" class="page">
+  <div class="top-header">
+    <div style="font-family:var(--font-head); font-size:18px; font-weight:700;">My Orders</div>
+  </div>
+  <div class="section-tabs" style="padding-top:12px;">
+    <div class="section-tab active" onclick="filterOrders(this,'all')">All</div>
+    <div class="section-tab" onclick="filterOrders(this,'active')">Active</div>
+    <div class="section-tab" onclick="filterOrders(this,'delivered')">Delivered</div>
+    <div class="section-tab" onclick="filterOrders(this,'cancelled')">Cancelled</div>
+  </div>
+  <div class="page-content" id="ordersList"></div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE: ORDER TRACKING -->
+<!-- ============================================================ -->
+<div id="page-tracking" class="page">
+  <div class="top-header">
+    <button class="back-btn" onclick="goBack()">←</button>
+    <div style="flex:1; font-family:var(--font-head); font-size:18px; font-weight:700;">Live Tracking</div>
+    <div style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:600; color:var(--accent2);">
+      <div class="live-dot"></div> LIVE
+    </div>
+  </div>
+  <div class="page-content">
+    <div class="tracking-map">
+      🗺️
+      <div class="tracking-overlay">
+        <span style="font-size:32px;">🛵</span>
+        <div>
+          <div style="font-weight:700; font-size:14px;">Rahul is on his way!</div>
+          <div style="font-size:12px; color:var(--text2);">Arriving in ~8 minutes</div>
+        </div>
+        <div style="margin-left:auto; background:var(--primary); color:white; padding:8px 14px; border-radius:20px; font-weight:700; font-size:13px; cursor:pointer;" onclick="callDelivery()">Call</div>
+      </div>
+    </div>
+    <div class="track-steps">
+      <div class="track-step">
+        <div class="track-icon-col">
+          <div class="track-icon-circle done">✅</div>
+          <div class="track-line done"></div>
+        </div>
+        <div class="track-content">
+          <div class="track-title">Order Placed</div>
+          <div class="track-time">2:30 PM · Your order has been received</div>
+        </div>
+      </div>
+      <div class="track-step">
+        <div class="track-icon-col">
+          <div class="track-icon-circle done">✅</div>
+          <div class="track-line done"></div>
+        </div>
+        <div class="track-content">
+          <div class="track-title">Order Confirmed</div>
+          <div class="track-time">2:32 PM · Ramesh Kirana Store accepted</div>
+        </div>
+      </div>
+      <div class="track-step">
+        <div class="track-icon-col">
+          <div class="track-icon-circle done">✅</div>
+          <div class="track-line done"></div>
+        </div>
+        <div class="track-content">
+          <div class="track-title">Being Prepared</div>
+          <div class="track-time">2:34 PM · Items being packed</div>
+        </div>
+      </div>
+      <div class="track-step">
+        <div class="track-icon-col">
+          <div class="track-icon-circle current">🛵</div>
+          <div class="track-line"></div>
+        </div>
+        <div class="track-content">
+          <div class="track-title" style="color:var(--primary);">Out for Delivery</div>
+          <div class="track-time" style="color:var(--primary); font-weight:600;">Arriving in ~8 minutes</div>
+        </div>
+      </div>
+      <div class="track-step">
+        <div class="track-icon-col">
+          <div class="track-icon-circle pending">🏠</div>
+        </div>
+        <div class="track-content">
+          <div class="track-title" style="color:var(--text3);">Delivered</div>
+          <div class="track-time" style="color:var(--text3);">Estimated 2:50 PM</div>
+        </div>
+      </div>
+    </div>
+    <div style="padding:0 16px 20px;">
+      <div style="font-family:var(--font-head); font-size:16px; font-weight:700; margin-bottom:12px;">Order Details</div>
+      <div style="background:white; border-radius:var(--radius); padding:16px; box-shadow:var(--shadow2);">
+        <div style="display:flex; justify-content:space-between; font-size:14px; padding:4px 0;">
+          <span style="color:var(--text2);">Order ID</span><span style="font-weight:600;">#FH2024001</span>
+        </div>
+        <div style="display:flex; justify-content:space-between; font-size:14px; padding:4px 0;">
+          <span style="color:var(--text2);">Store</span><span style="font-weight:600;">Ramesh Kirana Store</span>
+        </div>
+        <div style="display:flex; justify-content:space-between; font-size:14px; padding:4px 0;">
+          <span style="color:var(--text2);">Items</span><span style="font-weight:600;">3 items</span>
+        </div>
+        <div style="display:flex; justify-content:space-between; font-size:14px; padding:4px 0;">
+          <span style="color:var(--text2);">Amount</span><span style="font-weight:700; color:var(--primary);">₹285</span>
+        </div>
+        <div style="display:flex; justify-content:space-between; font-size:14px; padding:4px 0;">
+          <span style="color:var(--text2);">Payment</span><span style="font-weight:600;">Cash on Delivery</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE: WISHLIST -->
+<!-- ============================================================ -->
+<div id="page-wishlist" class="page">
+  <div class="top-header">
+    <div style="font-family:var(--font-head); font-size:18px; font-weight:700;">❤️ Wishlist</div>
+    <span style="font-size:14px; color:var(--text2);" id="wishlistCount">0 items</span>
+  </div>
+  <div id="wishlistEmpty" class="wishlist-empty">
+    <div class="icon" style="font-size:72px;">💝</div>
+    <h3>Your wishlist is empty</h3>
+    <p>Save products you love for later</p>
+    <button class="btn btn-primary" style="width:auto; padding:12px 24px;" onclick="navTo('home')">Explore Products</button>
+  </div>
+  <div id="wishlistGrid" class="wishlist-grid hidden"></div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE: PROFILE -->
+<!-- ============================================================ -->
+<div id="page-profile" class="page">
+  <div class="profile-hero">
+    <div class="avatar">👤</div>
+    <div class="profile-name" id="profileName">Ravi Kumar</div>
+    <div class="profile-phone" id="profilePhone">+91 98765 43210</div>
+    <div style="display:flex; gap:24px; margin-top:16px; text-align:center;">
+      <div><div style="font-family:var(--font-head); font-size:20px; font-weight:800; color:white;">12</div><div style="font-size:12px; opacity:0.75;">Orders</div></div>
+      <div><div style="font-family:var(--font-head); font-size:20px; font-weight:800; color:white;">₹250</div><div style="font-size:12px; opacity:0.75;">Wallet</div></div>
+      <div><div style="font-family:var(--font-head); font-size:20px; font-weight:800; color:white;">5</div><div style="font-size:12px; opacity:0.75;">Wishlist</div></div>
+    </div>
+  </div>
+  <div class="profile-menu">
+    <div class="menu-section">
+      <div class="menu-section-title">Account</div>
+      <div class="menu-item" onclick="showPage('page-wallet')">
+        <div class="menu-item-icon">👛</div>
+        <div class="menu-item-text">
+          <div class="menu-item-label">Flashly Wallet</div>
+          <div class="menu-item-sub">Balance: ₹250</div>
+        </div>
+        <div class="menu-item-arrow">›</div>
+      </div>
+      <div class="menu-item" onclick="showPage('page-addresses')">
+        <div class="menu-item-icon">📍</div>
+        <div class="menu-item-text">
+          <div class="menu-item-label">Saved Addresses</div>
+          <div class="menu-item-sub">2 addresses</div>
+        </div>
+        <div class="menu-item-arrow">›</div>
+      </div>
+      <div class="menu-item" onclick="showPage('page-notifications')">
+        <div class="menu-item-icon">🔔</div>
+        <div class="menu-item-text">
+          <div class="menu-item-label">Notifications</div>
+          <div class="menu-item-sub">3 unread</div>
+        </div>
+        <div class="menu-item-arrow">›</div>
+      </div>
+    </div>
+    <div class="menu-section">
+      <div class="menu-section-title">Orders & Offers</div>
+      <div class="menu-item" onclick="navTo('orders')">
+        <div class="menu-item-icon">📦</div>
+        <div class="menu-item-text">
+          <div class="menu-item-label">My Orders</div>
+          <div class="menu-item-sub">12 total orders</div>
+        </div>
+        <div class="menu-item-arrow">›</div>
+      </div>
+      <div class="menu-item" onclick="showPage('page-coupons')">
+        <div class="menu-item-icon">🏷️</div>
+        <div class="menu-item-text">
+          <div class="menu-item-label">My Coupons</div>
+          <div class="menu-item-sub">2 active coupons</div>
+        </div>
+        <div class="menu-item-arrow">›</div>
+      </div>
+      <div class="menu-item" onclick="navTo('wishlist')">
+        <div class="menu-item-icon">❤️</div>
+        <div class="menu-item-text">
+          <div class="menu-item-label">Wishlist</div>
+          <div class="menu-item-sub">5 saved items</div>
+        </div>
+        <div class="menu-item-arrow">›</div>
+      </div>
+    </div>
+    <div class="menu-section">
+      <div class="menu-section-title">Support</div>
+      <div class="menu-item" onclick="contactSupport()">
+        <div class="menu-item-icon">🎧</div>
+        <div class="menu-item-text">
+          <div class="menu-item-label">Help & Support</div>
+          <div class="menu-item-sub">24/7 customer care</div>
+        </div>
+        <div class="menu-item-arrow">›</div>
+      </div>
+      <div class="menu-item" onclick="showPage('page-about')">
+        <div class="menu-item-icon">ℹ️</div>
+        <div class="menu-item-text">
+          <div class="menu-item-label">About FlashlyHome</div>
+        </div>
+        <div class="menu-item-arrow">›</div>
+      </div>
+      <div class="menu-item" onclick="logout()" style="border-left:3px solid var(--danger);">
+        <div class="menu-item-icon">🚪</div>
+        <div class="menu-item-text">
+          <div class="menu-item-label" style="color:var(--danger);">Logout</div>
+        </div>
+        <div class="menu-item-arrow" style="color:var(--danger);">›</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE: WALLET -->
+<!-- ============================================================ -->
+<div id="page-wallet" class="page">
+  <div class="top-header">
+    <button class="back-btn" onclick="goBack()">←</button>
+    <div style="flex:1; font-family:var(--font-head); font-size:18px; font-weight:700;">My Wallet</div>
+  </div>
+  <div class="page-content">
+    <div class="wallet-hero">
+      <div style="font-size:13px; opacity:0.8;">Available Balance</div>
+      <div class="wallet-balance">₹250.00</div>
+      <div class="wallet-actions">
+        <button class="wallet-action-btn" onclick="addMoney()">➕ Add Money</button>
+        <button class="wallet-action-btn" onclick="showTransactions()">📋 History</button>
+      </div>
+    </div>
+    <div style="padding:16px;">
+      <div style="font-family:var(--font-head); font-size:17px; font-weight:700; margin-bottom:12px;">Quick Add</div>
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <button class="btn btn-outline btn-sm" onclick="quickAdd(100)">+ ₹100</button>
+        <button class="btn btn-outline btn-sm" onclick="quickAdd(200)">+ ₹200</button>
+        <button class="btn btn-outline btn-sm" onclick="quickAdd(500)">+ ₹500</button>
+        <button class="btn btn-outline btn-sm" onclick="quickAdd(1000)">+ ₹1000</button>
+      </div>
+    </div>
+    <div style="padding:0 16px;">
+      <div style="font-family:var(--font-head); font-size:17px; font-weight:700; margin-bottom:12px;">Transaction History</div>
+    </div>
+    <div class="txn-item">
+      <div class="txn-icon credit">💰</div>
+      <div class="txn-info">
+        <div class="txn-title">Cashback Received</div>
+        <div class="txn-date">Order #FH2024012 · Today 2:30 PM</div>
+      </div>
+      <div class="txn-amount credit">+₹25</div>
+    </div>
+    <div class="txn-item">
+      <div class="txn-icon debit">🛒</div>
+      <div class="txn-info">
+        <div class="txn-title">Order Payment</div>
+        <div class="txn-date">Order #FH2024011 · Yesterday 4:15 PM</div>
+      </div>
+      <div class="txn-amount debit">-₹185</div>
+    </div>
+    <div class="txn-item">
+      <div class="txn-icon credit">📲</div>
+      <div class="txn-info">
+        <div class="txn-title">Money Added</div>
+        <div class="txn-date">Dec 10 · Via Razorpay</div>
+      </div>
+      <div class="txn-amount credit">+₹500</div>
+    </div>
+    <div class="txn-item">
+      <div class="txn-icon credit">🎁</div>
+      <div class="txn-info">
+        <div class="txn-title">Welcome Bonus</div>
+        <div class="txn-date">Dec 1 · New user reward</div>
+      </div>
+      <div class="txn-amount credit">+₹50</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE: NOTIFICATIONS -->
+<!-- ============================================================ -->
+<div id="page-notifications" class="page">
+  <div class="top-header">
+    <button class="back-btn" onclick="goBack()">←</button>
+    <div style="flex:1; font-family:var(--font-head); font-size:18px; font-weight:700;">Notifications</div>
+    <button style="background:none; border:none; color:var(--primary); font-size:13px; font-weight:600; cursor:pointer;" onclick="markAllRead()">Mark all read</button>
+  </div>
+  <div class="page-content">
+    <div class="notif-item unread" onclick="showPage('page-tracking')">
+      <div class="notif-icon">🛵</div>
+      <div class="notif-text">
+        <div class="notif-title">Order Out for Delivery!</div>
+        <div class="notif-msg">Your order #FH2024001 is on its way. Rahul is 2 km away from you.</div>
+        <div class="notif-time">2 min ago</div>
+      </div>
+      <div class="notif-dot"></div>
+    </div>
+    <div class="notif-item unread">
+      <div class="notif-icon">🎁</div>
+      <div class="notif-text">
+        <div class="notif-title">Exclusive Diwali Offer!</div>
+        <div class="notif-msg">Get 30% off on all dry fruits. Use code DIWALI30. Valid till tomorrow!</div>
+        <div class="notif-time">1 hour ago</div>
+      </div>
+      <div class="notif-dot"></div>
+    </div>
+    <div class="notif-item unread">
+      <div class="notif-icon">💰</div>
+      <div class="notif-text">
+        <div class="notif-title">Cashback Credited!</div>
+        <div class="notif-msg">₹25 has been added to your Flashly Wallet for order #FH2024011.</div>
+        <div class="notif-time">Yesterday 4:30 PM</div>
+      </div>
+      <div class="notif-dot"></div>
+    </div>
+    <div class="notif-item">
+      <div class="notif-icon">⭐</div>
+      <div class="notif-text">
+        <div class="notif-title">Rate your order</div>
+        <div class="notif-msg">How was your experience with Ramesh Kirana Store? Your feedback helps others.</div>
+        <div class="notif-time">Dec 10, 5:00 PM</div>
+      </div>
+    </div>
+    <div class="notif-item">
+      <div class="notif-icon">✅</div>
+      <div class="notif-text">
+        <div class="notif-title">Order Delivered!</div>
+        <div class="notif-msg">Order #FH2024010 has been delivered. Enjoy your groceries!</div>
+        <div class="notif-time">Dec 10, 3:45 PM</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE: ADDRESSES -->
+<!-- ============================================================ -->
+<div id="page-addresses" class="page">
+  <div class="top-header">
+    <button class="back-btn" onclick="goBack()">←</button>
+    <div style="flex:1; font-family:var(--font-head); font-size:18px; font-weight:700;">Saved Addresses</div>
+    <button class="icon-btn" onclick="showAddressModal()">➕</button>
+  </div>
+  <div class="page-content" style="padding:16px;">
+    <div class="address-card selected" style="margin-bottom:12px;">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:6px;">
+        <span style="font-weight:700; font-size:14px; display:flex; align-items:center; gap:6px;">🏠 Home <span style="background:var(--primary); color:white; font-size:9px; padding:2px 6px; border-radius:10px; font-weight:600;">DEFAULT</span></span>
+        <div style="display:flex; gap:12px;">
+          <span style="font-size:13px; color:var(--primary); cursor:pointer;" onclick="editAddress(0)">Edit</span>
+          <span style="font-size:13px; color:var(--danger); cursor:pointer;" onclick="deleteAddress(0)">Delete</span>
+        </div>
+      </div>
+      <div style="font-size:13px; color:var(--text2); line-height:1.5;">123, Village Road, Near Panchayat Bhawan<br>Rampur, Uttar Pradesh - 243601</div>
+      <div style="font-size:12px; color:var(--text3); margin-top:6px;">📞 Ravi Kumar · +91 98765 43210</div>
+    </div>
+    <div class="address-card" style="margin-bottom:12px;">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:6px;">
+        <span style="font-weight:700; font-size:14px;">🏢 Work</span>
+        <div style="display:flex; gap:12px;">
+          <span style="font-size:13px; color:var(--primary); cursor:pointer;">Edit</span>
+          <span style="font-size:13px; color:var(--danger); cursor:pointer;">Delete</span>
+        </div>
+      </div>
+      <div style="font-size:13px; color:var(--text2); line-height:1.5;">Block-B, Gram Panchayat Office<br>Rampur, Uttar Pradesh - 243601</div>
+    </div>
+    <button class="btn btn-outline" style="display:flex; align-items:center; gap:8px; justify-content:center;" onclick="showAddressModal()">
+      ➕ Add New Address
+    </button>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE: COUPONS -->
+<!-- ============================================================ -->
+<div id="page-coupons" class="page">
+  <div class="top-header">
+    <button class="back-btn" onclick="goBack()">←</button>
+    <div style="flex:1; font-family:var(--font-head); font-size:18px; font-weight:700;">Coupons & Offers</div>
+  </div>
+  <div class="page-content" style="padding:16px;">
+    <div class="input-wrap" style="margin-bottom:16px; display:flex; gap:8px;">
+      <input type="text" class="input-field" id="couponInputField" placeholder="Enter coupon code" style="flex:1;">
+      <button class="btn btn-primary btn-sm" onclick="applyCouponCode()">Apply</button>
+    </div>
+    <div style="font-family:var(--font-head); font-size:16px; font-weight:700; margin-bottom:12px;">Available Coupons</div>
+    <div id="couponsList"></div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE: STORE DASHBOARD -->
+<!-- ============================================================ -->
+<div id="page-store-dashboard" class="page">
+  <div class="store-dash-header">
+    <div style="display:flex; align-items:center; gap:12px; margin-bottom:8px;">
+      <div style="width:48px; height:48px; border-radius:12px; background:rgba(255,255,255,0.2); display:flex; align-items:center; justify-content:center; font-size:28px;">🏪</div>
+      <div>
+        <div class="store-dash-name">Ramesh Kirana Store</div>
+        <div class="store-dash-meta">Rampur Village · ⭐ 4.8 (126 reviews)</div>
+      </div>
+    </div>
+    <div class="store-status-toggle">
+      <div class="toggle on" id="storeToggle" onclick="toggleStore()">
+        <div class="toggle-knob"></div>
+      </div>
+      <span style="font-size:13px; font-weight:600;" id="storeStatusText">Store OPEN</span>
+    </div>
+  </div>
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-val">₹4,280</div>
+      <div class="stat-label">Today's Earnings</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val">23</div>
+      <div class="stat-label">Orders Today</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val">148</div>
+      <div class="stat-label">Products Listed</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val">4.8⭐</div>
+      <div class="stat-label">Store Rating</div>
+    </div>
+  </div>
+  <div style="padding:0 16px 12px;">
+    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+      <button class="btn btn-primary btn-sm" onclick="showPage('page-store-products')">📦 Products</button>
+      <button class="btn btn-outline btn-sm" onclick="showPage('page-store-orders')">📋 Orders</button>
+      <button class="btn btn-outline btn-sm" onclick="showStoreAnalytics()">📊 Analytics</button>
+      <button class="btn btn-outline btn-sm" onclick="showStoreProfile()">⚙️ Settings</button>
+    </div>
+  </div>
+  <div class="store-orders">
+    <div style="font-family:var(--font-head); font-size:17px; font-weight:700; margin-bottom:12px;">New Orders</div>
+    <div class="store-order-item new">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <div style="font-weight:700;">#FH2024023 · Priya Sharma</div>
+        <div style="background:#FEF3C7; color:#92400E; padding:4px 10px; border-radius:10px; font-size:12px; font-weight:700;">NEW</div>
+      </div>
+      <div style="font-size:13px; color:var(--text2); margin-top:4px;">Aata 5kg, Rice 2kg, Dal 1kg</div>
+      <div style="font-size:13px; color:var(--text2); margin-top:2px;">📍 0.8 km away · ₹485</div>
+      <div class="store-order-actions">
+        <button class="btn btn-primary btn-sm" onclick="acceptOrder(this)">✅ Accept</button>
+        <button class="btn btn-outline btn-sm" style="color:var(--danger); border-color:var(--danger);" onclick="rejectOrder(this)">❌ Reject</button>
+      </div>
+    </div>
+    <div class="store-order-item">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <div style="font-weight:700;">#FH2024022 · Rahul Singh</div>
+        <div style="background:#DBEAFE; color:#1E40AF; padding:4px 10px; border-radius:10px; font-size:12px; font-weight:700;">PACKING</div>
+      </div>
+      <div style="font-size:13px; color:var(--text2); margin-top:4px;">Milk 2L, Eggs 12pcs, Bread</div>
+      <div style="font-size:13px; color:var(--text2); margin-top:2px;">📍 1.2 km away · ₹185</div>
+      <div class="store-order-actions">
+        <button class="btn btn-primary btn-sm" onclick="readyOrder(this)">📦 Mark Ready</button>
+      </div>
+    </div>
+    <div class="store-order-item done">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <div style="font-weight:700;">#FH2024021 · Meena Devi</div>
+        <div style="background:#D1FAE5; color:#065F46; padding:4px 10px; border-radius:10px; font-size:12px; font-weight:700;">DELIVERED</div>
+      </div>
+      <div style="font-size:13px; color:var(--text2); margin-top:4px;">Sugar 2kg, Oil 1L, Namak</div>
+      <div style="font-size:13px; color:var(--text2); margin-top:2px;">Delivered 2:45 PM · ₹220</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE: STORE PRODUCTS -->
+<!-- ============================================================ -->
+<div id="page-store-products" class="page">
+  <div class="top-header">
+    <button class="back-btn" onclick="goBack()">←</button>
+    <div style="flex:1; font-family:var(--font-head); font-size:18px; font-weight:700;">My Products</div>
+    <button class="btn btn-primary btn-sm" onclick="showAddProductModal()">+ Add</button>
+  </div>
+  <div class="section-tabs" style="padding-top:12px;">
+    <div class="section-tab active">All (148)</div>
+    <div class="section-tab" onclick="">In Stock (120)</div>
+    <div class="section-tab" onclick="">Low Stock (18)</div>
+    <div class="section-tab" onclick="">Out of Stock (10)</div>
+  </div>
+  <div class="page-content" style="padding:12px 16px;" id="storeProductsList"></div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE: DELIVERY DASHBOARD -->
+<!-- ============================================================ -->
+<div id="page-delivery-dashboard" class="page">
+  <div class="delivery-header">
+    <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
+      <div style="width:48px; height:48px; border-radius:50%; background:rgba(255,255,255,0.2); display:flex; align-items:center; justify-content:center; font-size:28px;">🛵</div>
+      <div>
+        <div style="font-family:var(--font-head); font-size:20px; font-weight:800; color:white;">Rajesh Yadav</div>
+        <div style="font-size:13px; color:rgba(255,255,255,0.75);">Delivery Partner · Rampur Zone</div>
+      </div>
+    </div>
+    <div class="delivery-online-toggle">
+      <div class="toggle on" id="deliveryToggle" onclick="toggleDelivery()">
+        <div class="toggle-knob"></div>
+      </div>
+      <span style="color:white; font-size:14px; font-weight:600;" id="deliveryStatusText">You're Online</span>
+      <div class="live-dot" style="margin-left:auto;"></div>
+    </div>
+  </div>
+  <div class="delivery-stats">
+    <div class="delivery-stat"><div class="val">₹1,240</div><div class="lbl">Today</div></div>
+    <div class="delivery-stat"><div class="val">8</div><div class="lbl">Deliveries</div></div>
+    <div class="delivery-stat"><div class="val">4.9⭐</div><div class="lbl">Rating</div></div>
+  </div>
+  <div style="padding:0 16px 12px;">
+    <div style="font-family:var(--font-head); font-size:16px; font-weight:700; margin-bottom:12px;">Earnings Chart</div>
+    <div class="earnings-chart" id="earningsChart">
+      <div class="chart-bar" style="height:60%;"></div>
+      <div class="chart-bar" style="height:80%;"></div>
+      <div class="chart-bar" style="height:45%;"></div>
+      <div class="chart-bar" style="height:90%;"></div>
+      <div class="chart-bar" style="height:70%;"></div>
+      <div class="chart-bar" style="height:55%;"></div>
+      <div class="chart-bar" style="height:100%;"></div>
+    </div>
+    <div style="display:flex; justify-content:space-between; font-size:11px; color:var(--text3); padding:0 4px;">
+      <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+    </div>
+  </div>
+  <div style="padding:0 16px;">
+    <div style="font-family:var(--font-head); font-size:16px; font-weight:700; margin-bottom:12px;">New Delivery Request</div>
+    <div class="delivery-order">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <div style="font-weight:700; font-size:15px;">#FH2024023</div>
+        <div style="background:#FEF3C7; color:#92400E; padding:4px 10px; border-radius:10px; font-size:12px; font-weight:700; animation:pulse 2s infinite;">NEW</div>
+      </div>
+      <div style="display:flex; gap:12px; font-size:13px; color:var(--text2); margin-bottom:8px;">
+        <span>📦 Ramesh Store</span>
+        <span>→</span>
+        <span>🏠 0.8 km</span>
+      </div>
+      <div style="display:flex; gap:12px; font-size:13px; margin-bottom:4px;">
+        <span>💰 Earn ₹35</span>
+        <span>⏱ ~10 min</span>
+        <span>🛵 1.5 km total</span>
+      </div>
+      <div class="delivery-order-actions">
+        <button class="btn btn-primary" style="flex:1;" onclick="acceptDelivery(this)">✅ Accept</button>
+        <button class="btn btn-outline" style="flex:1; color:var(--danger); border-color:var(--danger);" onclick="rejectDelivery(this)">❌ Decline</button>
+      </div>
+    </div>
+    <div style="font-family:var(--font-head); font-size:16px; font-weight:700; margin:16px 0 12px;">Recent Deliveries</div>
+    <div style="background:white; border-radius:var(--radius2); padding:14px; box-shadow:var(--shadow2); margin-bottom:10px; border-left:4px solid var(--accent2);">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <div><div style="font-weight:600;">#FH2024022</div><div style="font-size:12px; color:var(--text2);">Delivered at 2:15 PM · 1.2 km</div></div>
+        <div style="font-family:var(--font-head); font-weight:700; color:var(--accent2);">+₹40</div>
+      </div>
+    </div>
+    <div style="background:white; border-radius:var(--radius2); padding:14px; box-shadow:var(--shadow2); margin-bottom:10px; border-left:4px solid var(--accent2);">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <div><div style="font-weight:600;">#FH2024021</div><div style="font-size:12px; color:var(--text2);">Delivered at 1:45 PM · 0.9 km</div></div>
+        <div style="font-family:var(--font-head); font-weight:700; color:var(--accent2);">+₹30</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE: ADMIN DASHBOARD -->
+<!-- ============================================================ -->
+<div id="page-admin-dashboard" class="page">
+  <div class="admin-header">
+    <div style="display:flex; align-items:center; gap:12px; margin-bottom:8px;">
+      <div style="font-family:var(--font-head); font-size:22px; font-weight:800; color:white;">Admin Panel</div>
+      <span style="background:var(--accent); color:white; font-size:11px; font-weight:700; padding:3px 8px; border-radius:10px;">SUPER ADMIN</span>
+    </div>
+    <div style="font-size:13px; color:rgba(255,255,255,0.7);">FlashlyHome Platform Management</div>
+  </div>
+  <div class="admin-stats">
+    <div class="admin-stat">
+      <div class="icon">👥</div>
+      <div class="val">12,489</div>
+      <div class="lbl">Total Users</div>
+      <div class="trend">↑ 12% this week</div>
+    </div>
+    <div class="admin-stat">
+      <div class="icon">🏪</div>
+      <div class="val">284</div>
+      <div class="lbl">Active Stores</div>
+      <div class="trend">↑ 8 new today</div>
+    </div>
+    <div class="admin-stat">
+      <div class="icon">📦</div>
+      <div class="val">4,821</div>
+      <div class="lbl">Orders Today</div>
+      <div class="trend">↑ 23% vs yesterday</div>
+    </div>
+    <div class="admin-stat">
+      <div class="icon">💰</div>
+      <div class="val">₹2.4L</div>
+      <div class="lbl">Revenue Today</div>
+      <div class="trend">↑ 18% vs yesterday</div>
+    </div>
+  </div>
+  <div style="padding:0 16px 12px;">
+    <div style="font-family:var(--font-head); font-size:17px; font-weight:700; margin-bottom:12px;">Manage Platform</div>
+    <div class="admin-nav">
+      <div class="admin-nav-btn" onclick="adminManage('customers')">
+        <div class="icon">👥</div><div class="lbl">Customers</div>
+      </div>
+      <div class="admin-nav-btn" onclick="adminManage('stores')">
+        <div class="icon">🏪</div><div class="lbl">Stores</div>
+      </div>
+      <div class="admin-nav-btn" onclick="adminManage('delivery')">
+        <div class="icon">🛵</div><div class="lbl">Delivery</div>
+      </div>
+      <div class="admin-nav-btn" onclick="adminManage('products')">
+        <div class="icon">📦</div><div class="lbl">Products</div>
+      </div>
+      <div class="admin-nav-btn" onclick="adminManage('orders')">
+        <div class="icon">📋</div><div class="lbl">Orders</div>
+      </div>
+      <div class="admin-nav-btn" onclick="adminManage('categories')">
+        <div class="icon">📂</div><div class="lbl">Categories</div>
+      </div>
+      <div class="admin-nav-btn" onclick="adminManage('coupons')">
+        <div class="icon">🏷️</div><div class="lbl">Coupons</div>
+      </div>
+      <div class="admin-nav-btn" onclick="adminManage('payments')">
+        <div class="icon">💳</div><div class="lbl">Payments</div>
+      </div>
+      <div class="admin-nav-btn" onclick="adminManage('analytics')">
+        <div class="icon">📊</div><div class="lbl">Analytics</div>
+      </div>
+      <div class="admin-nav-btn" onclick="adminManage('reports')">
+        <div class="icon">📈</div><div class="lbl">Reports</div>
+      </div>
+    </div>
+  </div>
+  <div style="padding:0 16px 20px;">
+    <div style="font-family:var(--font-head); font-size:17px; font-weight:700; margin-bottom:12px;">Pending Approvals</div>
+    <div style="background:white; border-radius:var(--radius); padding:16px; box-shadow:var(--shadow2); margin-bottom:10px; border-left:4px solid var(--accent);">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+        <div style="font-weight:700;">Sanjay Kirana Store</div>
+        <span style="background:#FEF3C7; color:#92400E; padding:3px 8px; border-radius:8px; font-size:11px; font-weight:700;">PENDING</span>
+      </div>
+      <div style="font-size:13px; color:var(--text2); margin-bottom:10px;">Aligarh, UP · Applied Dec 11 · PIN: 202001</div>
+      <div style="display:flex; gap:8px;">
+        <button class="btn btn-primary btn-sm" onclick="approveStore(this)">✅ Approve</button>
+        <button class="btn btn-outline btn-sm" style="color:var(--danger); border-color:var(--danger);" onclick="rejectStore(this)">❌ Reject</button>
+        <button class="btn btn-outline btn-sm">📄 View Docs</button>
+      </div>
+    </div>
+    <div style="background:white; border-radius:var(--radius); padding:16px; box-shadow:var(--shadow2); border-left:4px solid var(--accent);">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+        <div style="font-weight:700;">Delivery Partner: Vikram</div>
+        <span style="background:#FEF3C7; color:#92400E; padding:3px 8px; border-radius:8px; font-size:11px; font-weight:700;">PENDING</span>
+      </div>
+      <div style="font-size:13px; color:var(--text2); margin-bottom:10px;">Rampur, UP · Applied Dec 11 · DL: UP77 2024</div>
+      <div style="display:flex; gap:8px;">
+        <button class="btn btn-primary btn-sm" onclick="approveStore(this)">✅ Approve</button>
+        <button class="btn btn-outline btn-sm" style="color:var(--danger); border-color:var(--danger);">❌ Reject</button>
+        <button class="btn btn-outline btn-sm">📄 View Docs</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE: ABOUT -->
+<!-- ============================================================ -->
+<div id="page-about" class="page" style="background:white;">
+  <div class="top-header">
+    <button class="back-btn" onclick="goBack()">←</button>
+    <div style="flex:1; font-family:var(--font-head); font-size:18px; font-weight:700;">About FlashlyHome</div>
+  </div>
+  <div class="page-content" style="padding:24px 20px; text-align:center;">
+    <div style="font-size:72px; margin-bottom:16px;">⚡</div>
+    <div style="font-family:var(--font-head); font-size:28px; font-weight:800; color:var(--primary); margin-bottom:8px;">FlashlyHome</div>
+    <div style="font-size:14px; color:var(--text2); margin-bottom:24px;">Version 1.0.0</div>
+    <div style="font-size:15px; color:var(--text2); line-height:1.7; text-align:left;">
+      FlashlyHome connects village customers with local kirana stores for grocery delivery in 10-30 minutes. We empower rural entrepreneurs and provide fresh groceries at your doorstep.<br><br>
+      <strong>Our Mission:</strong> Bring the convenience of instant grocery delivery to every village in India.<br><br>
+      <strong>Founded:</strong> 2024<br>
+      <strong>Coverage:</strong> UP, Bihar, MP, Rajasthan<br>
+      <strong>Stores:</strong> 284 active kirana stores<br>
+      <strong>Deliveries:</strong> 50,000+ completed
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- MODALS -->
+<!-- ============================================================ -->
+<!-- Location Modal -->
+<div id="locationModal" class="modal-overlay hidden" onclick="closeModal('locationModal')">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-title">📍 Change Delivery Location</div>
+    <div class="input-wrap" style="margin-bottom:16px;">
+      <input type="text" class="input-field" placeholder="Search village, town or PIN code" id="locationSearch">
+    </div>
+    <button class="btn btn-primary" style="margin-bottom:12px;" onclick="detectLocation()">📱 Use Current Location</button>
+    <div style="font-size:13px; font-weight:700; color:var(--text2); margin-bottom:8px;">RECENT LOCATIONS</div>
+    <div class="menu-item" onclick="setLocation('Rampur Village, UP - 243601')">
+      <div class="menu-item-icon">🏠</div>
+      <div class="menu-item-text">
+        <div class="menu-item-label">Rampur Village, UP</div>
+        <div class="menu-item-sub">PIN: 243601 · 5 stores nearby</div>
+      </div>
+    </div>
+    <div class="menu-item" onclick="setLocation('Bareilly, UP - 243001')">
+      <div class="menu-item-icon">📍</div>
+      <div class="menu-item-text">
+        <div class="menu-item-label">Bareilly, UP</div>
+        <div class="menu-item-sub">PIN: 243001 · 18 stores nearby</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Coupon Modal -->
+<div id="couponModal" class="modal-overlay hidden" onclick="closeModal('couponModal')">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-title">🏷️ Apply Coupon</div>
+    <div style="display:flex; gap:8px; margin-bottom:20px;">
+      <input type="text" class="input-field" id="couponModalInput" placeholder="Enter coupon code" style="flex:1;">
+      <button class="btn btn-primary btn-sm" onclick="applyCouponModal()">Apply</button>
+    </div>
+    <div id="couponModalList"></div>
+  </div>
+</div>
+
+<!-- Address Modal -->
+<div id="addressModal" class="modal-overlay hidden" onclick="closeModal('addressModal')">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-title">📍 Add New Address</div>
+    <div style="margin-bottom:14px;">
+      <div class="input-label">Address Type</div>
+      <div class="address-type-chips">
+        <div class="chip active" onclick="selectChip(this)">🏠 Home</div>
+        <div class="chip" onclick="selectChip(this)">🏢 Work</div>
+        <div class="chip" onclick="selectChip(this)">👨‍👩‍👧 Parents</div>
+        <div class="chip" onclick="selectChip(this)">📍 Other</div>
+      </div>
+    </div>
+    <div class="input-group">
+      <label class="input-label">Full Address</label>
+      <textarea class="input-field" rows="3" placeholder="House no, Street, Village..."></textarea>
+    </div>
+    <div class="input-group">
+      <label class="input-label">PIN Code</label>
+      <div class="input-wrap">
+        <input type="text" class="input-field" placeholder="6-digit PIN code" maxlength="6" id="newAddrPin">
+      </div>
+    </div>
+    <div class="input-group">
+      <label class="input-label">Landmark (optional)</label>
+      <div class="input-wrap">
+        <input type="text" class="input-field" placeholder="Near school, temple...">
+      </div>
+    </div>
+    <button class="btn btn-primary" onclick="saveAddress()">Save Address</button>
+  </div>
+</div>
+
+<!-- Add Product Modal (Store) -->
+<div id="addProductModal" class="modal-overlay hidden" onclick="closeModal('addProductModal')">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-title">📦 Add New Product</div>
+    <div class="input-group">
+      <label class="input-label">Product Name</label>
+      <input type="text" class="input-field" placeholder="e.g. Basmati Rice Premium">
+    </div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+      <div class="input-group">
+        <label class="input-label">MRP (₹)</label>
+        <input type="number" class="input-field" placeholder="65">
+      </div>
+      <div class="input-group">
+        <label class="input-label">Selling Price (₹)</label>
+        <input type="number" class="input-field" placeholder="55">
+      </div>
+    </div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+      <div class="input-group">
+        <label class="input-label">Weight/Unit</label>
+        <input type="text" class="input-field" placeholder="500g, 1L, 12pcs">
+      </div>
+      <div class="input-group">
+        <label class="input-label">Stock Qty</label>
+        <input type="number" class="input-field" placeholder="100">
+      </div>
+    </div>
+    <div class="input-group">
+      <label class="input-label">Category</label>
+      <select class="input-field">
+        <option>Select category</option>
+        <option>Grains & Pulses</option>
+        <option>Vegetables</option>
+        <option>Dairy & Eggs</option>
+        <option>Spices</option>
+        <option>Beverages</option>
+        <option>Snacks</option>
+      </select>
+    </div>
+    <button class="btn btn-primary" onclick="addProduct()">Add Product</button>
+  </div>
+</div>
+
+<!-- Rating Modal -->
+<div id="ratingModal" class="modal-overlay centered hidden" onclick="closeModal('ratingModal')">
+  <div class="modal centered" onclick="event.stopPropagation()" style="max-width:380px; margin:auto;">
+    <div style="text-align:center; margin-bottom:20px;">
+      <div style="font-size:48px; margin-bottom:12px;">⭐</div>
+      <div style="font-family:var(--font-head); font-size:20px; font-weight:700;">Rate your order</div>
+      <div style="font-size:14px; color:var(--text2); margin-top:4px;">from Ramesh Kirana Store</div>
+    </div>
+    <div style="display:flex; justify-content:center; gap:12px; margin-bottom:20px;" id="ratingStars">
+      <span style="font-size:36px; cursor:pointer;" onclick="setRating(1)">⭐</span>
+      <span style="font-size:36px; cursor:pointer;" onclick="setRating(2)">⭐</span>
+      <span style="font-size:36px; cursor:pointer;" onclick="setRating(3)">⭐</span>
+      <span style="font-size:36px; cursor:pointer;" onclick="setRating(4)">⭐</span>
+      <span style="font-size:36px; cursor:pointer;" onclick="setRating(5)">⭐</span>
+    </div>
+    <textarea class="input-field" rows="3" placeholder="Share your experience..." style="margin-bottom:16px;"></textarea>
+    <button class="btn btn-primary" onclick="submitRating()">Submit Review</button>
+  </div>
+</div>
+
+<script>
+// ================================================================
+// DATA
+// ================================================================
+const APP_DATA = {
+  categories: [
+    { id:1, name:'Grains & Dal', icon:'🌾', bg:'bg-orange' },
+    { id:2, name:'Vegetables', icon:'🥦', bg:'bg-green' },
+    { id:3, name:'Dairy & Eggs', icon:'🥛', bg:'bg-blue' },
+    { id:4, name:'Fruits', icon:'🍎', bg:'bg-red' },
+    { id:5, name:'Spices', icon:'🌶️', bg:'bg-orange' },
+    { id:6, name:'Beverages', icon:'☕', bg:'bg-brown' },
+    { id:7, name:'Snacks', icon:'🍿', bg:'bg-yellow' },
+    { id:8, name:'Household', icon:'🧹', bg:'bg-purple' },
+  ],
+  products: [
+    { id:1, name:'Basmati Rice', weight:'1 kg', price:89, mrp:110, emoji:'🌾', category:1, store:'Ramesh Kirana', rating:4.5, desc:'Premium quality Basmati rice from Dehradun farms. Long grain, aromatic and fluffy when cooked.', bg:'bg-orange' },
+    { id:2, name:'Fresh Tomatoes', weight:'500 g', price:25, mrp:35, emoji:'🍅', category:2, store:'Sita Vegetable', rating:4.8, desc:'Farm-fresh tomatoes picked daily from local fields. Rich in lycopene and perfect for cooking.', bg:'bg-red' },
+    { id:3, name:'Amul Milk', weight:'1 Litre', price:66, mrp:66, emoji:'🥛', category:3, store:'Mohan Dairy', rating:4.7, desc:'Pasteurized and homogenized full cream milk. Rich in calcium and protein.', bg:'bg-blue' },
+    { id:4, name:'Toor Dal', weight:'500 g', price:75, mrp:90, emoji:'🟡', category:1, store:'Ramesh Kirana', rating:4.3, desc:'Premium Arhar/Toor dal, machine cleaned. Perfect for everyday dal preparation.', bg:'bg-orange' },
+    { id:5, name:'Potatoes', weight:'1 kg', price:30, mrp:40, emoji:'🥔', category:2, store:'Sita Vegetable', rating:4.6, desc:'Fresh potatoes from UP farms. Ideal for sabzi, fries and biryani.', bg:'bg-green' },
+    { id:6, name:'Eggs (Farm Fresh)', weight:'12 pieces', price:78, mrp:84, emoji:'🥚', category:3, store:'Mohan Dairy', rating:4.9, desc:'Country eggs from free-range hens. High protein, fresh from local farms daily.', bg:'bg-blue' },
+    { id:7, name:'Onions', weight:'1 kg', price:35, mrp:45, emoji:'🧅', category:2, store:'Sita Vegetable', rating:4.4, desc:'Fresh red onions. Essential kitchen ingredient.', bg:'bg-red' },
+    { id:8, name:'Aata (Wheat Flour)', weight:'5 kg', price:185, mrp:220, emoji:'🌾', category:1, store:'Ramesh Kirana', rating:4.6, desc:'Chakki-ground whole wheat flour. Soft rotis guaranteed.', bg:'bg-orange' },
+    { id:9, name:'Amul Butter', weight:'100 g', price:55, mrp:62, emoji:'🧈', category:3, store:'Mohan Dairy', rating:4.8, desc:'Pasteurized butter. Made from fresh cream.', bg:'bg-blue' },
+    { id:10, name:'Bananas', weight:'6 pieces', price:30, mrp:40, emoji:'🍌', category:4, store:'Sita Vegetable', rating:4.5, desc:'Ripe Robusta bananas. Ready to eat, energy-packed.', bg:'bg-green' },
+    { id:11, name:'Red Chilli Powder', weight:'200 g', price:45, mrp:60, emoji:'🌶️', category:5, store:'Ramesh Kirana', rating:4.3, desc:'Pure Kashmiri red chilli powder. Rich colour, medium hot.', bg:'bg-red' },
+    { id:12, name:'Tea (Brooke Bond)', weight:'250 g', price:85, mrp:100, emoji:'🍵', category:6, store:'Ramesh Kirana', rating:4.7, desc:'Premium CTC tea. Strong flavour, perfect for chai.', bg:'bg-orange' },
+  ],
+  stores: [
+    { id:1, name:'Ramesh Kirana Store', emoji:'🏪', dist:'0.5 km', time:'10-15 min', rating:4.8, reviews:126, open:true },
+    { id:2, name:'Sita Vegetable Corner', emoji:'🥦', dist:'0.8 km', time:'15-20 min', rating:4.6, reviews:89, open:true },
+    { id:3, name:'Mohan Dairy & More', emoji:'🥛', dist:'1.2 km', time:'20-25 min', rating:4.9, reviews:203, open:true },
+    { id:4, name:'Sharma General Store', emoji:'🛒', dist:'1.8 km', time:'20-30 min', rating:4.4, reviews:67, open:false },
+  ],
+  orders: [
+    { id:'FH2024012', status:'delivered', items:'Aata 5kg, Rice 2kg, Dal', amount:485, date:'Today 2:45 PM', store:'Ramesh Kirana Store' },
+    { id:'FH2024011', status:'delivered', items:'Milk 2L, Eggs, Bread', amount:185, date:'Yesterday 4:30 PM', store:'Mohan Dairy & More' },
+    { id:'FH2024010', status:'delivered', items:'Tomatoes, Onions, Potatoes', amount:90, date:'Dec 10, 11:00 AM', store:'Sita Vegetable Corner' },
+    { id:'FH2024009', status:'cancelled', items:'Tea, Biscuits, Namkeen', amount:120, date:'Dec 9, 3:15 PM', store:'Ramesh Kirana Store' },
+  ],
+  coupons: [
+    { code:'FIRST50', disc:'50%', desc:'50% off on your first order', min:'₹100 minimum', valid:'Dec 31, 2024', icon:'🎁', color:'var(--primary)' },
+    { code:'VILLAGE20', disc:'20%', desc:'20% off for village customers', min:'₹200 minimum', valid:'Dec 25, 2024', icon:'🌾', color:'var(--accent2)' },
+    { code:'DIWALI30', disc:'30%', desc:'Diwali special discount', min:'₹150 minimum', valid:'Dec 15, 2024', icon:'🪔', color:'var(--accent)' },
+    { code:'FREESHIP', disc:'FREE', desc:'Free delivery on any order', min:'No minimum', valid:'Dec 20, 2024', icon:'🚚', color:'#2563EB' },
+  ],
+};
+
+// ================================================================
+// STATE
+// ================================================================
+const state = {
+  cart: {},
+  wishlist: new Set(),
+  currentPage: 'page-splash',
+  prevPage: null,
+  role: null,
+  user: null,
+  selectedPayment: 'cod',
+  appliedCoupon: null,
+  otpTimer: null,
+  bannerTimer: null,
+  currentBanner: 0,
+  currentProduct: null,
+  cartTotal: 0,
+};
+let currentProduct = null;
+
+// ================================================================
+// INIT
+// ================================================================
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    const saved = localStorage.getItem('fh_role');
+    const loggedIn = localStorage.getItem('fh_logged');
+    if (loggedIn && saved) {
+      state.role = saved;
+      state.user = JSON.parse(localStorage.getItem('fh_user') || '{}');
+      goToRolePage(saved);
+    } else {
+      showPage('page-role');
+    }
+    initBannerCarousel();
+    initCategoryGrid();
+    initProducts();
+    initStores();
+    initOrders();
+    initCoupons();
+    initStoreProducts();
+  }, 2200);
+});
+
+// ================================================================
+// PAGE NAVIGATION
+// ================================================================
+function showPage(id) {
+  const pages = document.querySelectorAll('.page');
+  const next = document.getElementById(id);
+  if (!next) return;
+  state.prevPage = state.currentPage;
+  pages.forEach(p => p.classList.remove('active'));
+  next.classList.add('active');
+  state.currentPage = id;
+
+  // Show/hide bottom nav and FAB
+  const customerPages = ['page-home','page-categories','page-orders','page-wishlist','page-profile'];
+  const nav = document.getElementById('bottomNav');
+  const fab = document.getElementById('fabCart');
+  if (customerPages.includes(id)) {
+    nav.classList.remove('hidden');
+    fab.classList.add('hidden');
+  } else if (state.role === 'customer') {
+    nav.classList.remove('hidden');
+    if (!['page-cart','page-checkout'].includes(id)) fab.classList.remove('hidden');
+    else fab.classList.add('hidden');
+  } else {
+    nav.classList.add('hidden');
+    fab.classList.add('hidden');
+  }
+
+  // Scroll to top
+  next.scrollTop = 0;
+  if (id === 'page-checkout') updateCheckoutPage();
+  if (id === 'page-cart') updateCartPage();
+}
+
+function goBack() {
+  if (state.prevPage) showPage(state.prevPage);
+  else if (state.role) goToRolePage(state.role);
+}
+
+function navTo(tab) {
+  const map = { home:'page-home', categories:'page-categories', orders:'page-orders', wishlist:'page-wishlist', profile:'page-profile' };
+  if (map[tab]) {
+    showPage(map[tab]);
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    const el = document.getElementById('nav-' + tab);
+    if (el) el.classList.add('active');
+    if (tab === 'wishlist') renderWishlist();
+  }
+}
+
+function selectRole(role) {
+  state.role = role;
+  showPage('page-login');
+}
+
+function goToRolePage(role) {
+  const nav = document.getElementById('bottomNav');
+  if (role === 'customer') {
+    nav.classList.remove('hidden');
+    showPage('page-home');
+  } else if (role === 'store') {
+    nav.classList.add('hidden');
+    showPage('page-store-dashboard');
+  } else if (role === 'delivery') {
+    nav.classList.add('hidden');
+    showPage('page-delivery-dashboard');
+  } else if (role === 'admin') {
+    nav.classList.add('hidden');
+    showPage('page-admin-dashboard');
+  }
+}
+
+async function verifyOTP() {
+
+  const otp = [1,2,3,4,5,6]
+    .map(n => document.getElementById('otp'+n).value)
+    .join('');
+
+  try {
+
+    await window.confirmationResult.confirm(otp);
+
+    alert("Phone Login Successful");
+
+  } catch(error) {
+
+    alert(error.message);
+
+  }
+
+}
+
+function loginSuccess(user) {
+  state.user = user;
+  localStorage.setItem('fh_logged', '1');
+  localStorage.setItem('fh_role', state.role || 'customer');
+  localStorage.setItem('fh_user', JSON.stringify(user));
+  document.getElementById('profileName').textContent = user.name;
+  document.getElementById('profilePhone').textContent = user.phone || user.email;
+  showToast('Welcome, ' + user.name + '! 🎉', 'success');
+  clearInterval(state.otpTimer);
+  goToRolePage(state.role || 'customer');
+}
+
+function logout() {
+  localStorage.clear();
+  state.cart = {};
+  state.wishlist.clear();
+  state.role = null;
+  state.user = null;
+  updateCartBadge();
+  showPage('page-role');
+  showToast('Logged out successfully');
+}
+
+function startOTPTimer() {
+  let t = 30;
+  document.getElementById('otpCountdown').textContent = t;
+  document.getElementById('otpResend').style.pointerEvents = 'none';
+  clearInterval(state.otpTimer);
+  state.otpTimer = setInterval(() => {
+    t--;
+    document.getElementById('otpCountdown').textContent = t;
+    if (t <= 0) {
+      clearInterval(state.otpTimer);
+      document.getElementById('otpResend').innerHTML = '<a onclick="resendOTP()">Resend OTP</a>';
+      document.getElementById('otpResend').style.pointerEvents = 'auto';
+    }
+  }, 1000);
+}
+
+function resendOTP() { startOTPTimer(); showToast('OTP resent!', 'success'); }
+function otpNext(el, nextId) {
+  if (el.value.length === 1 && nextId) document.getElementById(nextId).focus();
+  if (el.value && !/[0-9]/.test(el.value)) el.value = '';
+}
+
+function togglePass(id) {
+  const el = document.getElementById(id);
+  el.type = el.type === 'password' ? 'text' : 'password';
+}
+
+// ================================================================
+// BANNER CAROUSEL
+// ================================================================
+function initBannerCarousel() {
+  const carousel = document.getElementById('bannerCarousel');
+  if (!carousel) return;
+  carousel.addEventListener('scroll', () => {
+    const idx = Math.round(carousel.scrollLeft / carousel.offsetWidth);
+    document.querySelectorAll('.banner-dot').forEach((d, i) => d.classList.toggle('active', i === idx));
+  });
+  state.bannerTimer = setInterval(() => {
+    state.currentBanner = (state.currentBanner + 1) % 3;
+    const slides = carousel.querySelectorAll('.banner-slide');
+    if (slides[state.currentBanner]) {
+      slides[state.currentBanner].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+    }
+  }, 3500);
+}
+
+// ================================================================
+// CATEGORIES
+// ================================================================
+function initCategoryGrid() {
+  const grid = document.getElementById('categoryGrid');
+  const sidebar = document.getElementById('catSidebar');
+  if (!grid) return;
+
+  const colors = ['#FEF3C7','#D1FAE5','#DBEAFE','#FEE2E2','#FEF3C7','#EDE9FE','#FEE2E2','#DDD6FE'];
+  grid.innerHTML = APP_DATA.categories.map((c, i) =>
+    `<div class="cat-item" onclick="browseCat(${c.id}, '${c.name}')">
+      <div class="cat-icon" style="background:${colors[i]}">${c.icon}</div>
+      <div class="cat-name">${c.name}</div>
+    </div>`
+  ).join('');
+
+  if (sidebar) {
+    sidebar.innerHTML = APP_DATA.categories.map((c, i) =>
+      `<div class="cat-sidebar-item ${i===0?'active':''}" onclick="catSidebarSelect(this, ${c.id})">
+        <div class="cat-sidebar-icon">${c.icon}</div>
+        ${c.name}
+      </div>`
+    ).join('');
+  }
+}
+
+function browseCat(id, name) {
+  navTo('categories');
+  catSidebarSelect(document.querySelector(`[onclick="catSidebarSelect(this, ${id})"]`), id);
+}
+
+function catSidebarSelect(el, catId) {
+  document.querySelectorAll('.cat-sidebar-item').forEach(s => s.classList.remove('active'));
+  if (el) el.classList.add('active');
+  const products = APP_DATA.products.filter(p => p.category === catId);
+  const grid = document.getElementById('catProductsGrid');
+  if (grid) grid.innerHTML = products.length ? products.map(p => productCardHTML(p)).join('') : '<div class="empty-state"><div class="icon">📦</div><h3>No products</h3><p>Check back soon!</p></div>';
+}
+
+// ================================================================
+// PRODUCTS
+// ================================================================
+function initProducts() {
+  const bs = document.getElementById('bestSellers');
+  const veg = document.getElementById('vegProducts');
+  const dairy = document.getElementById('dairyProducts');
+  if (bs) bs.innerHTML = APP_DATA.products.slice(0,5).map(p => productCardScrollHTML(p)).join('');
+  if (veg) veg.innerHTML = APP_DATA.products.filter(p => p.category===2).map(p => productCardScrollHTML(p)).join('');
+  if (dairy) dairy.innerHTML = APP_DATA.products.filter(p => p.category===3).map(p => productCardScrollHTML(p)).join('');
+}
+
+function productCardScrollHTML(p) {
+  return `<div class="product-card" onclick="openProduct(${p.id})">
+    <div class="product-img" style="background:var(--bg);">
+      <span style="font-size:52px;">${p.emoji}</span>
+      <div class="product-badge">🌾 Local</div>
+      <button class="product-wish ${state.wishlist.has(p.id)?'active':''}" onclick="event.stopPropagation(); toggleWishlistItem(${p.id})">${state.wishlist.has(p.id)?'❤️':'🤍'}</button>
+    </div>
+    <div class="product-info">
+      <div class="product-name">${p.name}</div>
+      <div class="product-weight">${p.weight}</div>
+      <div class="product-price-row">
+        <div>
+          <span class="product-price">₹${p.price}</span>
+          ${p.mrp > p.price ? `<span class="product-mrp">₹${p.mrp}</span>` : ''}
+        </div>
+        <div id="cartCtrl_${p.id}">${cartControlHTML(p.id)}</div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function productCardHTML(p) {
+  return `<div class="product-card" onclick="openProduct(${p.id})">
+    <div class="product-img">
+      <span style="font-size:52px;">${p.emoji}</span>
+      <div class="product-badge">🌾 Local</div>
+      <button class="product-wish ${state.wishlist.has(p.id)?'active':''}" onclick="event.stopPropagation(); toggleWishlistItem(${p.id})">${state.wishlist.has(p.id)?'❤️':'🤍'}</button>
+    </div>
+    <div class="product-info">
+      <div class="product-name">${p.name}</div>
+      <div class="product-weight">${p.weight}</div>
+      <div class="product-price-row">
+        <div>
+          <span class="product-price">₹${p.price}</span>
+          ${p.mrp > p.price ? `<span class="product-mrp">₹${p.mrp}</span>` : ''}
+        </div>
+        <div id="cartCtrl_${p.id}">${cartControlHTML(p.id)}</div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function cartControlHTML(pid) {
+  const qty = state.cart[pid] || 0;
+  if (qty === 0) return `<button class="add-btn" onclick="event.stopPropagation(); addToCart(${pid})">+</button>`;
+  return `<div class="qty-ctrl">
+    <button class="qty-btn" onclick="event.stopPropagation(); changeQty(${pid}, -1)">−</button>
+    <span class="qty-num">${qty}</span>
+    <button class="qty-btn" onclick="event.stopPropagation(); changeQty(${pid}, 1)">+</button>
+  </div>`;
+}
+
+function refreshCartCtrls() {
+  APP_DATA.products.forEach(p => {
+    const el = document.getElementById('cartCtrl_' + p.id);
+    if (el) el.innerHTML = cartControlHTML(p.id);
+  });
+}
+
+function openProduct(id) {
+  const p = APP_DATA.products.find(x => x.id === id);
+  if (!p) return;
+  currentProduct = p;
+  document.getElementById('prodDetailHeaderName').textContent = p.name;
+  document.getElementById('prodDetailImg').innerHTML = `<span style="font-size:100px;">${p.emoji}</span>`;
+  document.getElementById('prodDetailName').textContent = p.name;
+  document.getElementById('prodDetailWeight').textContent = p.weight;
+  document.getElementById('prodDetailPrice').textContent = `₹${p.price}`;
+  document.getElementById('prodDetailMRP').textContent = p.mrp > p.price ? `₹${p.mrp}` : '';
+  const saved = p.mrp - p.price;
+  document.getElementById('prodDetailSaving').textContent = saved > 0 ? `Save ₹${saved}` : '';
+  document.getElementById('prodDetailStore').textContent = p.store;
+  document.getElementById('prodDetailDesc').textContent = p.desc;
+  document.getElementById('prodDetailStars').innerHTML = '⭐'.repeat(Math.floor(p.rating)) + (p.rating % 1 ? '½' : '');
+  updateProdDetailCart(id);
+  showPage('page-product');
+}
+
+function updateProdDetailCart(id) {
+  const qty = state.cart[id] || 0;
+  const ctrl = document.getElementById('prodCartCtrl');
+  if (!ctrl) return;
+  if (qty === 0) {
+    ctrl.innerHTML = `<button class="btn btn-outline" onclick="addToCartFromDetail()" style="padding:14px 20px; width:auto;">Add to Cart</button>`;
+  } else {
+    ctrl.innerHTML = `<div class="qty-ctrl">
+      <button class="qty-btn" onclick="changeQty(${id},-1)" style="width:36px;height:36px;">−</button>
+      <span class="qty-num" style="font-size:16px;">${qty}</span>
+      <button class="qty-btn" onclick="changeQty(${id},1)" style="width:36px;height:36px;">+</button>
+    </div>`;
+  }
+}
+
+function addToCartFromDetail() {
+  if (!currentProduct) return;
+  addToCart(currentProduct.id);
+}
+
+function buyNow() {
+  if (!currentProduct) return;
+  addToCart(currentProduct.id);
+  showPage('page-cart');
+}
+
+function shareProduct() {
+  showToast('Share link copied! 🔗');
+}
+
+// ================================================================
+// CART
+// ================================================================
+function addToCart(id) {
+  state.cart[id] = (state.cart[id] || 0) + 1;
+  updateCartBadge();
+  refreshCartCtrls();
+  if (currentProduct && currentProduct.id === id) updateProdDetailCart(id);
+  const p = APP_DATA.products.find(x => x.id === id);
+  showToast(`${p.name} added to cart 🛒`, 'success');
+}
+
+function changeQty(id, delta) {
+  state.cart[id] = Math.max(0, (state.cart[id] || 0) + delta);
+  if (state.cart[id] === 0) delete state.cart[id];
+  updateCartBadge();
+  refreshCartCtrls();
+  if (currentProduct && currentProduct.id === id) updateProdDetailCart(id);
+  if (state.currentPage === 'page-cart') updateCartPage();
+}
+
+function updateCartBadge() {
+  const count = Object.values(state.cart).reduce((a, b) => a + b, 0);
+  const badge = document.getElementById('cartBadge');
+  const fabBadge = document.getElementById('fabBadge');
+  const notifBadge = document.getElementById('notifBadge');
+  if (badge) badge.textContent = count;
+  if (fabBadge) fabBadge.textContent = count;
+  if (count > 0 && state.currentPage !== 'page-cart' && state.currentPage !== 'page-checkout') {
+    const fab = document.getElementById('fabCart');
+    if (fab && state.role === 'customer') fab.classList.remove('hidden');
+  }
+}
+
+function updateCartPage() {
+  const items = Object.entries(state.cart);
+  const empty = document.getElementById('cartEmpty');
+  const filled = document.getElementById('cartFilled');
+  if (items.length === 0) {
+    empty.classList.remove('hidden');
+    filled.classList.add('hidden');
+    return;
+  }
+  empty.classList.add('hidden');
+  filled.classList.remove('hidden');
+
+  let itemTotal = 0;
+  const area = document.getElementById('cartItemsArea');
+  area.innerHTML = items.map(([id, qty]) => {
+    const p = APP_DATA.products.find(x => x.id == id);
+    if (!p) return '';
+    itemTotal += p.price * qty;
+    return `<div class="cart-item">
+      <div class="cart-item-img">${p.emoji}</div>
+      <div class="cart-item-info">
+        <div class="cart-item-name">${p.name}</div>
+        <div class="cart-item-wt">${p.weight}</div>
+        <div class="cart-item-price">₹${p.price * qty}</div>
+      </div>
+      <div class="qty-ctrl">
+        <button class="qty-btn" onclick="changeQty(${id},-1)">−</button>
+        <span class="qty-num">${qty}</span>
+        <button class="qty-btn" onclick="changeQty(${id},1)">+</button>
+      </div>
+    </div>`;
+  }).join('');
+
+  const discount = state.appliedCoupon ? Math.round(itemTotal * 0.2) : 0;
+  const delivery = itemTotal >= 200 ? 0 : 20;
+  const total = itemTotal + delivery + 5 - discount;
+
+  document.getElementById('cartItemTotal').textContent = '₹' + itemTotal;
+  document.getElementById('cartDelivery').textContent = delivery === 0 ? 'FREE' : '₹' + delivery;
+  document.getElementById('cartTotal').textContent = '₹' + total;
+  document.getElementById('cartTotalChip').textContent = '₹' + total + ' total';
+  state.cartTotal = total;
+
+  if (discount > 0) {
+    document.getElementById('cartDiscountRow').style.display = 'flex';
+    document.getElementById('cartDiscount').textContent = '-₹' + discount;
+  }
+
+  // Update checkout fields
+  document.getElementById('coItemTotal') && (document.getElementById('coItemTotal').textContent = '₹' + itemTotal);
+  document.getElementById('coDelivery') && (document.getElementById('coDelivery').textContent = delivery === 0 ? 'FREE' : '₹' + delivery);
+  document.getElementById('coGrandTotal') && (document.getElementById('coGrandTotal').textContent = '₹' + total);
+  document.getElementById('coTotalBtn') && (document.getElementById('coTotalBtn').textContent = '₹' + total);
+}
+
+function clearCart() {
+  if (Object.keys(state.cart).length === 0) return;
+  state.cart = {};
+  updateCartBadge();
+  refreshCartCtrls();
+  updateCartPage();
+  showToast('Cart cleared');
+}
+
+function updateCheckoutPage() {
+  updateCartPage();
+  const area = document.getElementById('checkoutItems');
+  if (!area) return;
+  area.innerHTML = Object.entries(state.cart).map(([id, qty]) => {
+    const p = APP_DATA.products.find(x => x.id == id);
+    if (!p) return '';
+    return `<div style="display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid var(--border); font-size:14px;">
+      <span>${p.emoji} ${p.name} × ${qty}</span>
+      <span style="font-weight:600;">₹${p.price * qty}</span>
+    </div>`;
+  }).join('');
+}
+
+// ================================================================
+// STORES
+// ================================================================
+function initStores() {
+  const el = document.getElementById('storesList');
+  if (!el) return;
+  el.innerHTML = APP_DATA.stores.map(s => `
+    <div class="store-card" onclick="showToast('Opening ${s.name}...')">
+      <div class="store-logo">${s.emoji}</div>
+      <div class="store-info">
+        <div class="store-name">${s.name}</div>
+        <div class="store-meta">
+          <span>⭐ ${s.rating} (${s.reviews})</span>
+          <span>📍 ${s.dist}</span>
+          <span>⏱ ${s.time}</span>
+        </div>
+        <div style="margin-top:6px;">
+          <span class="store-badge ${s.open?'badge-open':'badge-closed'}">${s.open?'● Open':'● Closed'}</span>
+        </div>
+      </div>
+      <span style="color:var(--text3); font-size:20px;">›</span>
+    </div>
+  `).join('');
+}
+
+// ================================================================
+// ORDERS
+// ================================================================
+function initOrders() {
+  renderOrders(APP_DATA.orders);
+}
+
+function renderOrders(orders) {
+  const el = document.getElementById('ordersList');
+  if (!el) return;
+  if (orders.length === 0) {
+    el.innerHTML = `<div class="empty-state"><div class="icon">📋</div><h3>No orders yet</h3><p>Start shopping from local stores</p><button class="btn btn-primary" style="width:auto;padding:12px 24px;" onclick="navTo('home')">Shop Now</button></div>`;
+    return;
+  }
+  el.innerHTML = orders.map(o => `
+    <div class="order-card" onclick="openOrder('${o.id}')">
+      <div class="order-header">
+        <div>
+          <div class="order-id">#${o.id}</div>
+          <div class="order-date">${o.date}</div>
+        </div>
+        <span class="order-status status-${o.status}">${o.status.toUpperCase()}</span>
+      </div>
+      <div class="order-body">
+        <div class="order-items-preview">${o.store} · ${o.items}</div>
+        <div class="order-meta">
+          <span class="order-amount">₹${o.amount}</span>
+          ${o.status === 'delivered' ? '<span style="color:var(--accent2); font-size:13px; cursor:pointer;" onclick="event.stopPropagation(); openRating()">Rate Order ⭐</span>' : ''}
+          ${o.status === 'processing' || o.status === 'out' ? '<span style="color:var(--primary); font-size:13px; font-weight:600; cursor:pointer;" onclick="event.stopPropagation(); showPage(\'page-tracking\')">Track →</span>' : ''}
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function filterOrders(el, filter) {
+  document.querySelectorAll('.section-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  if (filter === 'all') renderOrders(APP_DATA.orders);
+  else renderOrders(APP_DATA.orders.filter(o => o.status === filter));
+}
+
+function openOrder(id) { showPage('page-tracking'); }
+function openRating() { document.getElementById('ratingModal').classList.remove('hidden'); }
+
+// ================================================================
+// CHECKOUT & PAYMENT
+// ================================================================
+function selectPayment(el) {
+  document.querySelectorAll('.payment-opt').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  state.selectedPayment = el.dataset.method;
+}
+
+function placeOrder() {
+  if (Object.keys(state.cart).length === 0) { showToast('Cart is empty!', 'error'); return; }
+  showToast('Placing order...', 'success');
+  if (state.selectedPayment === 'razorpay') {
+    showToast('Razorpay integration active in backend', 'warning');
+  }
+  setTimeout(() => {
+    const newOrder = {
+      id: 'FH2024' + (Math.floor(Math.random() * 900) + 100),
+      status: 'processing', items: 'Your order items',
+      amount: state.cartTotal, date: 'Just now', store: 'Ramesh Kirana Store'
+    };
+    APP_DATA.orders.unshift(newOrder);
+    state.cart = {};
+    updateCartBadge();
+    refreshCartCtrls();
+    showToast('Order placed successfully! 🎉', 'success');
+    showPage('page-tracking');
+  }, 1500);
+}
+
+// ================================================================
+// COUPONS
+// ================================================================
+function initCoupons() {
+  renderCouponList(document.getElementById('couponsList'));
+  renderCouponList(document.getElementById('couponModalList'));
+}
+
+function renderCouponList(el) {
+  if (!el) return;
+  el.innerHTML = APP_DATA.coupons.map(c => `
+    <div class="coupon-card">
+      <div class="coupon-left" style="background:${c.color};">${c.icon}</div>
+      <div class="coupon-right">
+        <span class="coupon-code" style="border-color:${c.color}; color:${c.color};">${c.code}</span>
+        <div style="font-size:16px; font-weight:700; color:var(--text); margin-bottom:2px;">${c.disc} off</div>
+        <div class="coupon-desc">${c.desc}</div>
+        <div class="coupon-valid">Min: ${c.min} · Valid till ${c.valid}</div>
+        <span class="coupon-apply" style="color:${c.color};" onclick="applyCoupon('${c.code}', '${c.disc}')">Apply →</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+function showCouponModal() { document.getElementById('couponModal').classList.remove('hidden'); }
+function applyCouponModal() {
+  const code = document.getElementById('couponModalInput').value.trim().toUpperCase();
+  applyCoupon(code);
+}
+function applyCouponCode() {
+  const code = document.getElementById('couponInputField').value.trim().toUpperCase();
+  applyCoupon(code);
+}
+function applyCoupon(code, disc) {
+  const coupon = APP_DATA.coupons.find(c => c.code === code);
+  if (!coupon) { showToast('Invalid coupon code', 'error'); return; }
+  state.appliedCoupon = coupon;
+  closeModal('couponModal');
+  document.getElementById('couponText').textContent = `${code} applied!`;
+  document.getElementById('couponSaved').textContent = `${coupon.disc} off applied`;
+  updateCartPage();
+  showToast(`Coupon ${code} applied! 🎉`, 'success');
+}
+
+// ================================================================
+// WISHLIST
+// ================================================================
+function toggleWishlistItem(idOrEl) {
+  const id = typeof idOrEl === 'number' ? idOrEl : (currentProduct && currentProduct.id);
+  if (!id) return;
+  if (state.wishlist.has(id)) { state.wishlist.delete(id); showToast('Removed from wishlist'); }
+  else { state.wishlist.add(id); showToast('Added to wishlist ❤️', 'success'); }
+  document.getElementById('wishlistCount').textContent = state.wishlist.size + ' items';
+  refreshCartCtrls();
+}
+
+function renderWishlist() {
+  const empty = document.getElementById('wishlistEmpty');
+  const grid = document.getElementById('wishlistGrid');
+  if (state.wishlist.size === 0) {
+    empty.classList.remove('hidden'); grid.classList.add('hidden');
+    document.getElementById('wishlistCount').textContent = '0 items';
+    return;
+  }
+  empty.classList.add('hidden'); grid.classList.remove('hidden');
+  const items = Array.from(state.wishlist).map(id => APP_DATA.products.find(p => p.id === id)).filter(Boolean);
+  grid.innerHTML = items.map(p => productCardHTML(p)).join('');
+  document.getElementById('wishlistCount').textContent = items.length + ' items';
+}
+
+// ================================================================
+// SEARCH
+// ================================================================
+function handleSearch(q) {
+  const homeContent = document.getElementById('homeContent');
+  const searchArea = document.getElementById('searchResultsArea');
+  const noRes = document.getElementById('noResults');
+  q = q.trim().toLowerCase();
+  if (!q) {
+    searchArea.classList.add('hidden');
+    return;
+  }
+  searchArea.classList.remove('hidden');
+  document.getElementById('searchResultsTitle').textContent = `Results for "${q}"`;
+  const results = APP_DATA.products.filter(p => p.name.toLowerCase().includes(q) || (p.desc && p.desc.toLowerCase().includes(q)));
+  const grid = document.getElementById('searchResultsGrid');
+  if (results.length === 0) { grid.innerHTML = ''; noRes.classList.remove('hidden'); }
+  else { noRes.classList.add('hidden'); grid.innerHTML = results.map(p => productCardHTML(p)).join(''); }
+}
+
+function focusSearch() { document.getElementById('searchInput').focus(); }
+
+// ================================================================
+// LOCATION
+// ================================================================
+function showLocationModal() { document.getElementById('locationModal').classList.remove('hidden'); }
+
+function detectLocation() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(pos => {
+      setLocation('Detected Location · PIN: 243601');
+    }, () => showToast('Enable location permission', 'warning'));
+  } else showToast('Geolocation not supported', 'error');
+}
+
+function setLocation(loc) {
+  document.getElementById('currentLocation').textContent = loc + ' ▾';
+  closeModal('locationModal');
+  showToast('Delivery location updated 📍', 'success');
+}
+
+function checkPincode() {
+  const pin = prompt('Enter your PIN code:');
+  if (pin && pin.length === 6) showToast(`Checking serviceability for PIN ${pin}...`);
+  else showToast('Enter valid 6-digit PIN', 'error');
+}
+
+// ================================================================
+// STORE OWNER ACTIONS
+// ================================================================
+function toggleStore() {
+  const t = document.getElementById('storeToggle');
+  const text = document.getElementById('storeStatusText');
+  t.classList.toggle('on');
+  const isOpen = t.classList.contains('on');
+  text.textContent = isOpen ? 'Store OPEN' : 'Store CLOSED';
+  showToast(isOpen ? 'Store is now open 🟢' : 'Store is now closed 🔴', isOpen ? 'success' : 'warning');
+}
+
+function acceptOrder(btn) {
+  const card = btn.closest('.store-order-item');
+  card.classList.remove('new'); card.classList.add('');
+  card.style.borderLeftColor = '#3B82F6';
+  card.querySelector('.store-order-actions').innerHTML = '<button class="btn btn-primary btn-sm" onclick="readyOrder(this)">📦 Mark Ready</button>';
+  showToast('Order accepted! Start packing 📦', 'success');
+}
+
+function rejectOrder(btn) {
+  const card = btn.closest('.store-order-item');
+  card.remove();
+  showToast('Order rejected', 'error');
+}
+
+function readyOrder(btn) {
+  const card = btn.closest('.store-order-item');
+  card.style.borderLeftColor = 'var(--accent2)';
+  card.querySelector('.store-order-actions').remove();
+  const status = card.querySelector('div[style*="background:#DBEAFE"]') || card.querySelector('div[style*="PACKING"]');
+  if (status) { status.textContent = 'READY'; status.style.background = '#D1FAE5'; status.style.color = '#065F46'; }
+  showToast('Order ready for pickup! 🛵', 'success');
+}
+
+function initStoreProducts() {
+  const el = document.getElementById('storeProductsList');
+  if (!el) return;
+  el.innerHTML = APP_DATA.products.map(p => `
+    <div style="background:white; border-radius:var(--radius2); padding:14px; margin-bottom:10px; box-shadow:var(--shadow2); display:flex; align-items:center; gap:12px; border:1px solid var(--border);">
+      <div style="width:52px; height:52px; border-radius:10px; background:var(--bg); display:flex; align-items:center; justify-content:center; font-size:30px;">${p.emoji}</div>
+      <div style="flex:1;">
+        <div style="font-weight:600; font-size:14px;">${p.name}</div>
+        <div style="font-size:12px; color:var(--text2);">₹${p.price} · ${p.weight}</div>
+        <div style="font-size:11px; margin-top:4px;"><span style="background:#D1FAE5; color:#065F46; padding:2px 8px; border-radius:10px; font-weight:600;">In Stock</span></div>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:6px; align-items:flex-end;">
+        <button class="btn btn-outline btn-sm" onclick="editProduct(${p.id})" style="font-size:11px; padding:6px 12px;">Edit</button>
+        <button class="btn btn-sm" onclick="deleteProduct(${p.id})" style="font-size:11px; padding:6px 12px; background:#FEE2E2; color:#991B1B; border:none;">Delete</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function showAddProductModal() { document.getElementById('addProductModal').classList.remove('hidden'); }
+function addProduct() { closeModal('addProductModal'); showToast('Product added successfully 📦', 'success'); }
+function editProduct(id) { showToast('Edit product feature coming soon'); }
+function deleteProduct(id) { showToast('Product deleted', 'error'); }
+function showStoreAnalytics() { showToast('Analytics: 23 orders today, ₹4,280 revenue', 'success'); }
+function showStoreProfile() { showToast('Store settings opening...'); }
+
+// ================================================================
+// DELIVERY PARTNER ACTIONS
+// ================================================================
+function toggleDelivery() {
+  const t = document.getElementById('deliveryToggle');
+  const text = document.getElementById('deliveryStatusText');
+  t.classList.toggle('on');
+  const isOnline = t.classList.contains('on');
+  text.textContent = isOnline ? "You're Online" : "You're Offline";
+  showToast(isOnline ? 'You are now online 🟢' : 'You are now offline 🔴', isOnline ? 'success' : 'warning');
+}
+
+function acceptDelivery(btn) {
+  const card = btn.closest('.delivery-order');
+  card.innerHTML = `<div style="text-align:center; padding:16px; color:var(--accent2);">
+    <div style="font-size:32px; margin-bottom:8px;">🛵</div>
+    <div style="font-weight:700;">Order Accepted! Go pick it up.</div>
+    <div style="font-size:13px; color:var(--text2); margin-top:4px;">Navigate to Ramesh Store → Customer</div>
+    <button class="btn btn-primary" style="margin-top:12px;" onclick="showToast('Navigation started 🗺️', \'success\')">Start Navigation 🗺️</button>
+    <button class="btn btn-outline" style="margin-top:8px;" onclick="showToast('Order delivered! +₹35 earned 💰', \'success\')">Mark Delivered ✅</button>
+  </div>`;
+  showToast('Order accepted! Navigate to store 🗺️', 'success');
+}
+
+function rejectDelivery(btn) {
+  const card = btn.closest('.delivery-order');
+  card.remove();
+  showToast('Order declined. Next one coming soon...', 'warning');
+}
+
+function callDelivery() { showToast('Calling delivery partner... 📞'); }
+
+// ================================================================
+// ADMIN ACTIONS
+// ================================================================
+function adminManage(section) {
+  const msgs = {
+    customers: '12,489 total users · 156 new today', stores: '284 active stores · 8 pending approval',
+    delivery: '89 active partners · 12 online now', products: '4,821 products listed',
+    orders: '4,821 orders today · 98% delivery rate', categories: '16 main categories',
+    coupons: '12 active coupons · 2 expired', payments: '₹24L processed today',
+    analytics: 'Revenue up 18% vs yesterday', reports: 'Generating report...'
+  };
+  showToast(msgs[section] || 'Opening ' + section, 'success');
+}
+
+function approveStore(btn) {
+  const card = btn.closest('[style*="border-left"]');
+  btn.textContent = '✅ Approved';
+  btn.style.background = 'var(--accent2)';
+  btn.disabled = true;
+  showToast('Store approved! Owner notified via SMS', 'success');
+}
+
+function rejectStore(btn) {
+  const card = btn.closest('[style*="border-left"]');
+  card.style.opacity = '0.5';
+  btn.textContent = '❌ Rejected';
+  btn.disabled = true;
+  showToast('Store application rejected', 'warning');
+}
+
+// ================================================================
+// MODALS
+// ================================================================
+function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+
+function showAddressModal() { document.getElementById('addressModal').classList.remove('hidden'); }
+
+function saveAddress() {
+  closeModal('addressModal');
+  showToast('Address saved successfully 📍', 'success');
+}
+
+function selectChip(el) {
+  el.closest('.address-type-chips').querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function contactSupport() { showToast('Support: support@flashlyhome.in · 1800-XXX-XXXX'); }
+
+// ================================================================
+// TABS
+// ================================================================
+function switchTab(el, contentId) {
+  el.closest('.tabs').querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  ['prodDesc','prodNutrition','prodReviews'].forEach(id => {
+    const c = document.getElementById(id);
+    if (c) c.classList.toggle('hidden', id !== contentId);
+  });
+}
+
+// ================================================================
+// RATING
+// ================================================================
+function setRating(n) {
+  const stars = document.querySelectorAll('#ratingStars span');
+  stars.forEach((s, i) => s.textContent = i < n ? '⭐' : '☆');
+}
+
+function submitRating() {
+  closeModal('ratingModal');
+  showToast('Review submitted! Thank you ⭐', 'success');
+}
+
+// ================================================================
+// WALLET
+// ================================================================
+function addMoney() {
+  const amt = prompt('Enter amount to add (₹):');
+  if (amt && !isNaN(amt) && amt > 0) showToast(`₹${amt} added to wallet! 💰`, 'success');
+  else showToast('Invalid amount', 'error');
+}
+
+function quickAdd(amt) { showToast(`₹${amt} added to wallet via Razorpay! 💰`, 'success'); }
+function showTransactions() { showToast('Transaction history loaded'); }
+
+// ================================================================
+// TOAST
+// ================================================================
+function showToast(msg, type = '') {
+  const container = document.getElementById('toastContainer');
+  const toast = document.createElement('div');
+  toast.className = `toast ${type}`;
+  const icons = { success:'✅', error:'❌', warning:'⚠️' };
+  toast.innerHTML = `<span>${icons[type]||'ℹ️'}</span> ${msg}`;
+  container.appendChild(toast);
+  setTimeout(() => {
+    toast.style.animation = 'toastOut 0.3s ease forwards';
+    setTimeout(() => toast.remove(), 300);
+  }, 2800);
+}
+
+// ================================================================
+// UTILITY
+// ================================================================
+function markAllRead() {
+  document.querySelectorAll('.notif-item.unread').forEach(n => n.classList.remove('unread'));
+  document.querySelectorAll('.notif-dot').forEach(d => d.remove());
+  document.getElementById('notifBadge').textContent = '0';
+  showToast('All notifications marked as read');
+}
+
+// Delivery timer update
+setInterval(() => {
+  const el = document.getElementById('deliverTimer');
+  if (el) {
+    const times = ['10 min','12 min','15 min','18 min','20 min'];
+    el.textContent = times[Math.floor(Math.random() * times.length)];
+  }
+}, 8000);
+
+// Handle back button
+window.addEventListener('popstate', (e) => {
+  e.preventDefault();
+  goBack();
+});
+</script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+
+import {
+  getAuth,
+  RecaptchaVerifier,
+  signInWithPhoneNumber
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDKaHrRZip3kH2I2LjkJg5cU_plj348OpM",
+  authDomain: "flashly-78900.firebaseapp.com",
+  projectId: "flashly-78900",
+  storageBucket: "flashly-78900.firebasestorage.app",
+  messagingSenderId: "715860740050",
+  appId: "1:715860740050:web:5062be7ca90e0549962a0b",
+  measurementId: "G-SX3S52BJZF"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+window.sendOTP = async function() {
+if (!window.recaptchaVerifier) {
+  window.recaptchaVerifier = new RecaptchaVerifier(
+    auth,
+    "recaptcha-container",
+    {
+      size: "normal"
+    }
+  );
+}
+  const phone =
+"+91" +
+document.getElementById("loginPhone").value;
+  const appVerifier =
+    window.recaptchaVerifier;
+
+  const confirmationResult =
+    await signInWithPhoneNumber(
+      auth,
+      phone,
+      appVerifier
+    );
+
+  window.confirmationResult =
+    confirmationResult;
+
+  alert("OTP Sent");
+};
+globalThis.sendOTP = window.sendOTP;
+
+window.verifyOTP = async function() {
+
+  const code =
+  document.getElementById("otp1").value +
+  document.getElementById("otp2").value +
+  document.getElementById("otp3").value +
+  document.getElementById("otp4").value +
+  document.getElementById("otp5").value +
+  document.getElementById("otp6").value;
+console.log("OTP CODE =", code);
+  try {
+    await window.confirmationResult.confirm(code);
+    localStorage.setItem("loggedIn", "true");
+localStorage.setItem(
+  "phoneNumber",
+  document.getElementById("loginPhone").value
+);
+    showToast("Login Successful", "success");
+showPage("page-home");
+
+document.getElementById("bottomNav")
+  .classList.remove("hidden");
+  } catch(error) {
+    alert(error.message);
+  }
+};
+globalThis.verifyOTP = window.verifyOTP;
+</script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+import {
+  getAuth,
+  RecaptchaVerifier,
+  signInWithPhoneNumber
+} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDKaHrRZip3kH2I2LjkJg5cU_plj348OpM",
+  authDomain: "flashly-78900.firebaseapp.com",
+  projectId: "flashly-78900",
+  storageBucket: "flashly-78900.firebasestorage.app",
+  messagingSenderId: "715860740050",
+  appId: "1:715860740050:web:f1fd78937afbb0fa962a0b",
+  measurementId: "G-Q6NN4333ZE"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+window.recaptchaVerifier = new RecaptchaVerifier(
+  auth,
+  "recaptcha-container",
+  {
+    size: "invisible"
+  }
+);
+
+window.sendOTP = async function () {
+  const phone = document.getElementById("loginPhone").value;
+
+  const fullPhone = "+91" + phone.trim();
+
+  try {
+    const confirmationResult =
+      await signInWithPhoneNumber(
+        auth,
+        fullPhone,
+        window.recaptchaVerifier
+      );
+
+    window.confirmationResult = confirmationResult;
+    console.log("confirmationResult =", confirmationResult);
+
+    document.getElementById("page-login").style.display = "none";
+    document.getElementById("page-otp").style.display = "block";
+
+    alert("OTP Sent Successfully");
+  } catch (error) {
+    alert(error.message);
+  }
+};
+window.addEventListener("load", () => {
+
+    if (localStorage.getItem("loggedIn") === "true") {
+
+        showPage("page-home");
+
+        document.getElementById("bottomNav")
+            .classList.remove("hidden");
+    }
+
+});
+</script>
+<div id="recaptcha-container"></div>
+</body>
+</html>
