@@ -37,12 +37,14 @@
   --transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; -webkit-tap-highlight-color: transparent; height: 100%; overflow: hidden; }
 body {
   font-family: var(--font);
   background: var(--bg);
   color: var(--text);
-  min-height: 100vh;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
   overflow-x: hidden;
   max-width: 480px;
   margin: 0 auto;
@@ -66,7 +68,7 @@ body {
 .bold { font-weight: 700; }
 
 /* PAGES */
-.page { display: none; min-height: 100vh; flex-direction: column; animation: fadeIn 0.3s ease; }
+.page { display: none; height: 100vh; height: 100dvh; flex-direction: column; animation: fadeIn 0.3s ease; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior-y: contain; }
 .page.active { display: flex; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 
@@ -112,38 +114,135 @@ body {
 @keyframes dotPulse { 0%,80%,100% { transform: scale(0.8); opacity: 0.5; } 40% { transform: scale(1.2); opacity: 1; } }
 
 /* ======== AUTH PAGES ======== */
-.auth-page {
-  background: white;
-  padding: 0;
-  min-height: 100vh;
+.auth-page{
+    position:relative;
+    background:linear-gradient(160deg,#3d0066 0%,#5b0ca5 60%,#4b0082 100%);
+    min-height:100vh;
+    overflow:hidden;
 }
-.auth-header {
-  background: linear-gradient(145deg, #4C1D95, #7C3AED);
-  padding: 56px 24px 40px;
-  color: white;
-  clip-path: ellipse(100% 80% at 50% 0%);
-  padding-bottom: 60px;
+.skip-btn{
+    position:absolute;
+    top:20px;
+    right:20px;
+
+    padding:10px 18px;
+
+    background:rgba(255,255,255,0.12);
+
+    border:1px solid rgba(255,255,255,0.18);
+
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+
+    border-radius:18px;
+
+    color:#ffffff;
+
+    font-size:16px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:0.3s;
+
+    z-index:100;
 }
-.auth-logo { font-family: var(--font-head); font-size: 28px; font-weight: 800; margin-bottom: 8px; }
-.auth-logo span { color: #F59E0B; }
-.auth-subtitle { font-size: 14px; opacity: 0.8; }
-.auth-body { padding: 32px 24px; flex: 1; }
-.auth-title { font-family: var(--font-head); font-size: 24px; font-weight: 700; margin-bottom: 6px; color: var(--text); }
-.auth-desc { font-size: 14px; color: var(--text2); margin-bottom: 28px; }
+
+.skip-btn:hover{
+    background:rgba(255,255,255,0.20);
+}
+.auth-header{
+    background:transparent;
+    padding:80px 30px 20px;
+    color:white;
+}
+.auth-logo{
+    font-family:'Syne',sans-serif;
+    font-size:42px;      /* reduced from 48px */
+    font-weight:800;
+    color:#ffffff;
+
+    letter-spacing:-1px;
+    line-height:1;
+
+    white-space:nowrap;
+
+    margin-bottom:18px;
+}
+
+.auth-logo span{
+    color:#FFA726;
+}
+.auth-subtitle{
+    font-size:15px;
+    color:#D8D8D8;
+    margin-top:10px;
+    opacity:1;
+}
+.auth-body{
+    padding:35px 24px;
+    flex:1;
+    color:white;
+}
+.auth-title{
+    display:none;
+}
+.auth-desc{
+    color:#EAEAEA;
+    font-size:18px;
+    margin-top:15px;
+    margin-bottom:35px;
+}
 
 /* INPUTS */
-.input-group { margin-bottom: 18px; }
-.input-label { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 8px; display: block; }
-.input-wrap { position: relative; }
-.input-field {
-  width: 100%; padding: 14px 16px;
-  border: 1.5px solid var(--border); border-radius: var(--radius2);
-  font-family: var(--font); font-size: 15px; color: var(--text);
-  background: var(--bg); transition: var(--transition); outline: none;
+.input-group{
+    margin-bottom:35px;
 }
-.input-field:focus { border-color: var(--primary); background: white; box-shadow: 0 0 0 3px rgba(91,33,182,0.1); }
+.input-label{
+    font-size:18px;
+    font-weight:700;
+    color:white;
+    margin-bottom:14px;
+    display:block;
+}
+.input-wrap { position: relative; }
+.input-field{
+    width:100%;
+    height:72px;
+    border:none;
+    border-radius:40px;
+    background:#fff;
+
+    padding-left:95px;
+    padding-right:25px;
+
+    font-size:22px;
+    color:#333;
+
+    box-shadow:0 10px 25px rgba(0,0,0,.15);
+}
+.input-field:focus{
+    box-shadow:
+        0 0 0 4px rgba(255,255,255,.25),
+        0 12px 35px rgba(0,0,0,.2);
+}
+.input-field::placeholder{
+    color:#999;
+    font-size:20px;
+    font-weight:500;
+}
 .input-icon { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); font-size: 18px; cursor: pointer; }
-.input-prefix { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-size: 15px; font-weight: 600; color: var(--text); }
+.input-prefix{
+    position:absolute;
+    left:35px;
+    top:50%;
+    transform:translateY(-50%);
+    font-size:20px;
+    font-weight:700;
+    color:#222;
+    z-index:2;
+}
 .has-prefix { padding-left: 48px; }
 .phone-flag { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
 
@@ -895,6 +994,51 @@ body {
 }
 .fab:hover { transform: scale(1.05); }
 .fab.hidden { display: none; }
+/* LOGIN FOOTER */
+
+.login-footer{
+    margin-top:40px;
+    text-align:center;
+    color:#d8d8d8;
+    font-size:15px;
+    line-height:28px;
+}
+
+.login-footer p{
+    margin:0;
+}
+
+.login-footer span{
+    color:#ff73b3;
+    font-weight:700;
+    cursor:pointer;
+}
+/* ================= LOGIN FEATURES ================= */
+
+.login-features{
+    margin-top:35px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.12);
+    border-radius:22px;
+    padding:20px 10px;
+    backdrop-filter:blur(10px);
+}
+
+.feature{
+    flex:1;
+    text-align:center;
+    color:white;
+}
+
+.feature div{
+    margin-top:8px;
+    font-size:14px;
+    font-weight:600;
+    line-height:20px;
+}
 </style>
 </head>
 <body>
@@ -946,79 +1090,80 @@ body {
 </div>
 
 <!-- ============================================================ -->
-<!-- PAGE: ROLE SELECT -->
-<!-- ============================================================ -->
-<div id="page-role" class="page" style="background:white;">
-  <div class="auth-header" style="clip-path:none; padding-bottom:32px;">
-    <div class="auth-logo">Flashly<span>Home</span></div>
-    <div class="auth-subtitle">Who are you?</div>
-  </div>
-  <div style="padding:24px 20px 8px;">
-    <div class="auth-title">Choose your role</div>
-    <div class="auth-desc">Select how you want to use FlashlyHome</div>
-  </div>
-  <div class="role-selector">
-    <div class="role-card" onclick="selectRole('customer')">
-      <span class="role-icon">🛒</span>
-      <div>
-        <div class="role-label">Customer</div>
-        <div class="role-sub">Order groceries from local stores</div>
-      </div>
-      <span style="margin-left:auto; color:var(--text3);">›</span>
-    </div>
-    <div class="role-card" onclick="selectRole('store')">
-      <span class="role-icon">🏪</span>
-      <div>
-        <div class="role-label">Store Owner</div>
-        <div class="role-sub">Manage your kirana store</div>
-      </div>
-      <span style="margin-left:auto; color:var(--text3);">›</span>
-    </div>
-    <div class="role-card" onclick="selectRole('delivery')">
-      <span class="role-icon">🛵</span>
-      <div>
-        <div class="role-label">Delivery Partner</div>
-        <div class="role-sub">Deliver and earn money</div>
-      </div>
-      <span style="margin-left:auto; color:var(--text3);">›</span>
-    </div>
-    <div class="role-card" onclick="selectRole('admin')">
-      <span class="role-icon">⚙️</span>
-      <div>
-        <div class="role-label">Admin</div>
-        <div class="role-sub">Manage the entire platform</div>
-      </div>
-      <span style="margin-left:auto; color:var(--text3);">›</span>
-    </div>
-  </div>
-</div>
-
 <!-- ============================================================ -->
 <!-- PAGE: LOGIN -->
 <!-- ============================================================ -->
 <div id="page-login" class="page auth-page">
+  <button class="skip-btn"
+onclick="skipLogin()">
+Skip
+</button>
   <div class="auth-header">
     <div class="auth-logo">Flashly<span>Home</span></div>
     <div class="auth-subtitle">Village grocery in minutes ⚡</div>
   </div>
   <div class="auth-body">
-    <div class="auth-title">Welcome back!</div>
-    <div class="auth-desc">Login to order from local kirana stores</div>
-
-    <div class="divider"><span>or login with phone</span></div>
+  
+   <div class="auth-desc">
+Login to order groceries near you
+</div>
 
     <div class="input-group">
       <label class="input-label">Mobile Number</label>
       <div class="input-wrap">
-        <span class="input-prefix">🇮🇳 +91 </span>
-        <input type="tel" class="input-field has-prefix" id="loginPhone" placeholder="Enter 10-digit number" maxlength="10" pattern="[0-9]{10}">
-      </div>
+    <span class="input-prefix">+91</span>
+
+    <input
+        type="tel"
+        class="input-field"
+        id="loginPhone"
+        placeholder="Enter Phone Number"
+        maxlength="10">
+</div>
     </div>
    <button class="btn btn-primary"
         onclick="sendOTP()"
         style="margin-bottom:16px;">
   Send OTP ›
 </button>
+<div class="login-features">
+
+<div class="feature">
+
+🔒
+
+<div>Secure Login</div>
+
+</div>
+
+<div class="feature">
+
+⚡
+
+<div>Fast Delivery</div>
+
+</div>
+
+<div class="feature">
+
+🛍️
+
+<div>Nearby Stores</div>
+
+</div>
+
+</div>
+<div class="login-footer">
+
+    <p>By continuing, you agree to our</p>
+
+    <p>
+        <span>Terms of Use</span>
+        &
+        <span>Privacy Policy</span>
+    </p>
+
+</div>
   </div>
 </div>
 
@@ -1049,10 +1194,7 @@ body {
 
     <div class="auth-link" style="margin-top:12px;">
     <a href="javascript:void(0)"
-   onclick="
-      document.getElementById('page-otp').classList.remove('active');
-      document.getElementById('page-login').classList.add('active');
-   ">
+   onclick="showPage('page-login')">
    ← Change number
 </a>
     </div>
@@ -1067,7 +1209,7 @@ body {
   <div class="top-header">
     <div class="header-location" onclick="showLocationModal()">
       <div class="location-label">📍 Delivering to</div>
-      <div class="location-name" id="currentLocation">Rampur Village, UP <span style="color:var(--primary); font-size:16px;">▾</span></div>
+      <div class="location-name" id="currentLocation">select location <span style="color:var(--primary); font-size:16px;">▾</span></div>
     </div>
     <div class="header-actions">
       <button class="icon-btn" onclick="showPage('page-notifications')">🔔<span class="badge" id="notifBadge">3</span></button>
@@ -1090,8 +1232,12 @@ body {
     <div class="pincode-banner">
       <span style="font-size:24px;">📍</span>
       <div>
-        <div style="font-size:13px; font-weight:700; color:#92400E;">Serving Rampur & nearby villages</div>
-        <div style="font-size:12px; color:#78350F;">PIN: 243601 · Stores within 20 KM radius</div>
+        <div style="font-size:13px; font-weight:700; color:#92400E;">
+Delivering to your selected location
+</div>
+        <div style="font-size:12px; color:#78350F;">
+Select your location to view nearby stores
+</div>
       </div>
       <button class="btn btn-sm" style="background:#F59E0B; color:white; border:none; margin-left:auto; padding:8px 12px; font-size:12px;" onclick="checkPincode()">Change PIN</button>
     </div>
@@ -1570,8 +1716,7 @@ body {
 <div id="page-profile" class="page">
   <div class="profile-hero">
     <div class="avatar">👤</div>
-    <div class="profile-name" id="profileName">Ravi Kumar</div>
-    <div class="profile-phone" id="profilePhone">+91 98765 43210</div>
+  
     <div style="display:flex; gap:24px; margin-top:16px; text-align:center;">
       <div><div style="font-family:var(--font-head); font-size:20px; font-weight:800; color:white;">12</div><div style="font-size:12px; opacity:0.75;">Orders</div></div>
       <div><div style="font-family:var(--font-head); font-size:20px; font-weight:800; color:white;">₹250</div><div style="font-size:12px; opacity:0.75;">Wallet</div></div>
@@ -1799,8 +1944,7 @@ body {
           <span style="font-size:13px; color:var(--danger); cursor:pointer;" onclick="deleteAddress(0)">Delete</span>
         </div>
       </div>
-      <div style="font-size:13px; color:var(--text2); line-height:1.5;">123, Village Road, Near Panchayat Bhawan<br>Rampur, Uttar Pradesh - 243601</div>
-      <div style="font-size:12px; color:var(--text3); margin-top:6px;">📞 Ravi Kumar · +91 98765 43210</div>
+
     </div>
     <div class="address-card" style="margin-bottom:12px;">
       <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:6px;">
@@ -2338,6 +2482,7 @@ const state = {
   prevPage: null,
   role: null,
   user: null,
+  isGuest:true,
   selectedPayment: 'cod',
   appliedCoupon: null,
   otpTimer: null,
@@ -2354,13 +2499,24 @@ let currentProduct = null;
 window.addEventListener('load', () => {
   setTimeout(() => {
     const saved = localStorage.getItem('fh_role');
-    const loggedIn = localStorage.getItem('fh_logged');
+    const loggedIn = localStorage.getItem('fh_logged') === '1';
     if (loggedIn && saved) {
-      state.role = saved;
-      state.user = JSON.parse(localStorage.getItem('fh_user') || '{}');
-      goToRolePage(saved);
-    } else {
-      showPage('page-role');
+
+    state.isGuest = false;
+
+    state.role = saved;
+
+    try {
+      state.user = JSON.parse(localStorage.getItem("fh_user") || "{}");
+    } catch (e) {
+      state.user = {};
+    }
+
+    goToRolePage(saved);
+
+} else {
+      state.role = 'customer';
+      showPage('page-login');
     }
     initBannerCarousel();
     initCategoryGrid();
@@ -2380,39 +2536,85 @@ function showPage(id) {
   const next = document.getElementById(id);
   if (!next) return;
   state.prevPage = state.currentPage;
-  pages.forEach(p => p.classList.remove('active'));
+  // Class-based visibility (.page.active) is the single source of truth for
+  // which page is shown. Clear any inline display style first so a stray
+  // element.style.display set anywhere else in the app can never override
+  // the class rule and leave an old page stuck visible on top of the new one.
+  pages.forEach(p => { p.classList.remove('active'); p.style.removeProperty('display'); });
   next.classList.add('active');
   state.currentPage = id;
 
   // Show/hide bottom nav and FAB
-  const customerPages = ['page-home','page-categories','page-orders','page-wishlist','page-profile'];
-  const nav = document.getElementById('bottomNav');
-  const fab = document.getElementById('fabCart');
-  if (customerPages.includes(id)) {
-    nav.classList.remove('hidden');
-    fab.classList.add('hidden');
-  } else if (state.role === 'customer') {
-    nav.classList.remove('hidden');
-    if (!['page-cart','page-checkout'].includes(id)) fab.classList.remove('hidden');
-    else fab.classList.add('hidden');
-  } else {
-    nav.classList.add('hidden');
-    fab.classList.add('hidden');
-  }
+  const customerPages = [
+    'page-home',
+    'page-categories',
+    'page-orders',
+    'page-wishlist',
+    'page-profile',
+    'page-cart',
+    'page-checkout',
+    'page-tracking'
+];
 
-  // Scroll to top
-  next.scrollTop = 0;
-  if (id === 'page-checkout') updateCheckoutPage();
-  if (id === 'page-cart') updateCartPage();
+const nav = document.getElementById("bottomNav");
+const fab = document.getElementById("fabCart");
+
+if (customerPages.includes(id)) {
+
+    nav.classList.remove("hidden");
+
+    if (id === "page-cart" || id === "page-checkout") {
+        fab.classList.add("hidden");
+    } else {
+        fab.classList.remove("hidden");
+    }
+
+} else {
+
+    nav.classList.add("hidden");
+    fab.classList.add("hidden");
+
 }
 
+  // Scroll every page to top on open (the page itself, plus any nested
+  // scroll containers within it), instead of scrolling the document/body.
+  next.scrollTop = 0;
+  next.querySelectorAll('.page-content, .cat-sidebar, .cat-products-area').forEach(el => { el.scrollTop = 0; });
+
+if (id === "page-checkout") updateCheckoutPage();
+if (id === "page-cart") updateCartPage();
+
+}   // <-- This closes showPage()
+
 function goBack() {
-  if (state.prevPage) showPage(state.prevPage);
-  else if (state.role) goToRolePage(state.role);
+
+    if(state.prevPage){
+        showPage(state.prevPage);
+    }
+    else if(state.role){
+        goToRolePage(state.role);
+    }
+
 }
 
 function navTo(tab) {
   const map = { home:'page-home', categories:'page-categories', orders:'page-orders', wishlist:'page-wishlist', profile:'page-profile' };
+  // Require login for protected tabs. Trust in-memory state first; fall back
+  // to localStorage in case state hasn't been hydrated yet.
+  const loggedIn = !state.isGuest || localStorage.getItem("fh_logged") === "1";
+
+if (
+    !loggedIn &&
+    (
+        tab === "orders" ||
+        tab === "wishlist" ||
+        tab === "profile"
+    )
+) {
+    showToast("Please login to continue");
+    showPage("page-login");
+    return;
+}
   if (map[tab]) {
     showPage(map[tab]);
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
@@ -2430,9 +2632,14 @@ function selectRole(role) {
 function goToRolePage(role) {
   const nav = document.getElementById('bottomNav');
   if (role === 'customer') {
+
     nav.classList.remove('hidden');
+
+    window.scrollTo(0, 0);
+
     showPage('page-home');
-  } else if (role === 'store') {
+
+} else if (role === 'store') {
     nav.classList.add('hidden');
     showPage('page-store-dashboard');
   } else if (role === 'delivery') {
@@ -2452,9 +2659,34 @@ async function verifyOTP() {
 
   try {
 
-    await window.confirmationResult.confirm(otp);
+ let result;
 
-    alert("Phone Login Successful");
+try {
+
+    result = await window.confirmationResult.confirm(otp);
+
+    console.log("Firebase Login Success");
+
+    console.log(result);
+
+}
+catch(e){
+
+    console.error("Firebase Error");
+
+    console.error(e);
+
+    alert(e.message);
+
+    return;
+
+}
+console.log("Calling loginSuccess()");
+
+loginSuccess({
+    name: "Customer",
+    phone: result.user.phoneNumber
+});
 
   } catch(error) {
 
@@ -2464,20 +2696,27 @@ async function verifyOTP() {
 
 }
 
-function loginSuccess(user) {
-  state.user = user;
-  localStorage.setItem('fh_logged', '1');
-  localStorage.setItem('fh_role', state.role || 'customer');
-  localStorage.setItem('fh_user', JSON.stringify(user));
-  document.getElementById('profileName').textContent = user.name;
-  document.getElementById('profilePhone').textContent = user.phone || user.email;
-  showToast('Welcome, ' + user.name + '! 🎉', 'success');
-  clearInterval(state.otpTimer);
-  goToRolePage(state.role || 'customer');
+function loginSuccess(user){
+
+    state.isGuest = false;
+    console.log("Guest Status:", state.isGuest);
+    state.role = "customer";
+    state.user = user;
+
+    localStorage.setItem("fh_logged","1");
+    localStorage.setItem("fh_role","customer");
+    localStorage.setItem("fh_user",JSON.stringify(user));
+
+    showToast("Welcome " + user.name,"success");
+
+    goToRolePage("customer");
 }
 
 function logout() {
-  localStorage.clear();
+ localStorage.removeItem("fh_logged");
+localStorage.removeItem("fh_role");
+localStorage.removeItem("fh_user");
+state.isGuest = true;
   state.cart = {};
   state.wishlist.clear();
   state.role = null;
@@ -2485,6 +2724,15 @@ function logout() {
   updateCartBadge();
   showPage('page-role');
   showToast('Logged out successfully');
+}
+function skipLogin() {
+
+    state.isGuest = true;
+
+    state.role = "customer";
+
+    showPage("page-home");
+
 }
 
 function startOTPTimer() {
@@ -2683,6 +2931,15 @@ function addToCartFromDetail() {
 }
 
 function buyNow() {
+  if(state.isGuest){
+
+showToast("Login to continue");
+
+showPage("page-login");
+
+return;
+
+}
   if (!currentProduct) return;
   addToCart(currentProduct.id);
   showPage('page-cart');
@@ -2696,6 +2953,15 @@ function shareProduct() {
 // CART
 // ================================================================
 function addToCart(id) {
+  if(state.isGuest){
+
+showToast("Login to order products");
+
+showPage("page-login");
+
+return;
+
+}
   state.cart[id] = (state.cart[id] || 0) + 1;
   updateCartBadge();
   refreshCartCtrls();
@@ -2884,6 +3150,15 @@ function selectPayment(el) {
 }
 
 function placeOrder() {
+  if(state.isGuest){
+
+showToast("Login to place order");
+
+showPage("page-login");
+
+return;
+
+}
   if (Object.keys(state.cart).length === 0) { showToast('Cart is empty!', 'error'); return; }
   showToast('Placing order...', 'success');
   if (state.selectedPayment === 'razorpay') {
@@ -2952,6 +3227,15 @@ function applyCoupon(code, disc) {
 // WISHLIST
 // ================================================================
 function toggleWishlistItem(idOrEl) {
+  if(state.isGuest){
+
+showToast("Please login");
+
+showPage("page-login");
+
+return;
+
+}
   const id = typeof idOrEl === 'number' ? idOrEl : (currentProduct && currentProduct.id);
   if (!id) return;
   if (state.wishlist.has(id)) { state.wishlist.delete(id); showToast('Removed from wishlist'); }
@@ -3243,13 +3527,17 @@ window.addEventListener('popstate', (e) => {
 </script>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-
 import {
   getAuth,
   RecaptchaVerifier,
   signInWithPhoneNumber
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 
+// Single Firebase app instance. (Previously this app was initialized twice
+// with two different SDK versions/app IDs and two competing
+// RecaptchaVerifier instances bound to the same #recaptcha-container div,
+// which caused OTP login to silently fail or bypass the app's own login
+// state. There is now exactly one app, one auth instance, and one verifier.)
 const firebaseConfig = {
   apiKey: "AIzaSyDKaHrRZip3kH2I2LjkJg5cU_plj348OpM",
   authDomain: "flashly-78900.firebaseapp.com",
@@ -3263,129 +3551,43 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-window.sendOTP = async function() {
-if (!window.recaptchaVerifier) {
-  window.recaptchaVerifier = new RecaptchaVerifier(
-    auth,
-    "recaptcha-container",
-    {
-      size: "normal"
+// window.sendOTP is the only piece of Firebase-specific login logic.
+// Once the OTP is confirmed, control is handed back to the main script's
+// own verifyOTP()/loginSuccess() functions so state.isGuest, state.user,
+// state.role and localStorage (fh_logged / fh_role / fh_user) stay the
+// single source of truth for login state across the whole app.
+window.sendOTP = async function () {
+  const phoneInput = document.getElementById("loginPhone");
+  const phone = phoneInput ? phoneInput.value.trim() : "";
+  if (!phone) {
+    showToast("Please enter your mobile number", "error");
+    return;
+  }
+
+  try {
+    if (!window.recaptchaVerifier) {
+      window.recaptchaVerifier = new RecaptchaVerifier(auth, "recaptcha-container", {
+        size: "invisible"
+      });
     }
-  );
-}
-  const phone =
-"+91" +
-document.getElementById("loginPhone").value;
-  const appVerifier =
-    window.recaptchaVerifier;
 
-  const confirmationResult =
-    await signInWithPhoneNumber(
-      auth,
-      phone,
-      appVerifier
-    );
+    const fullPhone = "+91" + phone;
+    const confirmationResult = await signInWithPhoneNumber(auth, fullPhone, window.recaptchaVerifier);
+    window.confirmationResult = confirmationResult;
 
-  window.confirmationResult =
-    confirmationResult;
+    const otpDesc = document.getElementById("otpDesc");
+    if (otpDesc) otpDesc.textContent = "We've sent a 6-digit OTP to +91 " + phone;
 
-  alert("OTP Sent");
+    showPage("page-otp");
+    startOTPTimer();
+    showToast("OTP sent successfully", "success");
+  } catch (error) {
+    showToast(error.message || "Failed to send OTP", "error");
+  }
 };
 globalThis.sendOTP = window.sendOTP;
-
-window.verifyOTP = async function() {
-
-  const code =
-  document.getElementById("otp1").value +
-  document.getElementById("otp2").value +
-  document.getElementById("otp3").value +
-  document.getElementById("otp4").value +
-  document.getElementById("otp5").value +
-  document.getElementById("otp6").value;
-console.log("OTP CODE =", code);
-  try {
-    await window.confirmationResult.confirm(code);
-    localStorage.setItem("loggedIn", "true");
-localStorage.setItem(
-  "phoneNumber",
-  document.getElementById("loginPhone").value
-);
-    showToast("Login Successful", "success");
-showPage("page-home");
-
-document.getElementById("bottomNav")
-  .classList.remove("hidden");
-  } catch(error) {
-    alert(error.message);
-  }
-};
-globalThis.verifyOTP = window.verifyOTP;
 </script>
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-import {
-  getAuth,
-  RecaptchaVerifier,
-  signInWithPhoneNumber
-} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyDKaHrRZip3kH2I2LjkJg5cU_plj348OpM",
-  authDomain: "flashly-78900.firebaseapp.com",
-  projectId: "flashly-78900",
-  storageBucket: "flashly-78900.firebasestorage.app",
-  messagingSenderId: "715860740050",
-  appId: "1:715860740050:web:f1fd78937afbb0fa962a0b",
-  measurementId: "G-Q6NN4333ZE"
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-
-window.recaptchaVerifier = new RecaptchaVerifier(
-  auth,
-  "recaptcha-container",
-  {
-    size: "invisible"
-  }
-);
-
-window.sendOTP = async function () {
-  const phone = document.getElementById("loginPhone").value;
-
-  const fullPhone = "+91" + phone.trim();
-
-  try {
-    const confirmationResult =
-      await signInWithPhoneNumber(
-        auth,
-        fullPhone,
-        window.recaptchaVerifier
-      );
-
-    window.confirmationResult = confirmationResult;
-    console.log("confirmationResult =", confirmationResult);
-
-    document.getElementById("page-login").style.display = "none";
-    document.getElementById("page-otp").style.display = "block";
-
-    alert("OTP Sent Successfully");
-  } catch (error) {
-    alert(error.message);
-  }
-};
-window.addEventListener("load", () => {
-
-    if (localStorage.getItem("loggedIn") === "true") {
-
-        showPage("page-home");
-
-        document.getElementById("bottomNav")
-            .classList.remove("hidden");
-    }
-
-});
-</script>
 <div id="recaptcha-container"></div>
 </body>
 </html>
