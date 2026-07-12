@@ -70,6 +70,11 @@ body {
 /* PAGES */
 .page { display: none; height: 100vh; height: 100dvh; flex-direction: column; animation: fadeIn 0.3s ease; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior-y: contain; }
 .page.active { display: flex; }
+/* When a page has its own scrollable .page-content region, the outer .page
+   must not ALSO be independently scrollable - two nested scroll containers
+   fighting for the same touch gesture is what caused the view to suddenly
+   snap back to the top while scrolling down. */
+.page:has(> .page-content) { overflow: hidden; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 
 /* ======== SPLASH ======== */
@@ -667,6 +672,31 @@ body {
 .menu-item-sub { font-size: 12px; color: var(--text2); }
 .menu-item-arrow { color: var(--text3); font-size: 18px; }
 
+/* ======== ACCOUNT DETAILS FORM ======== */
+.pf-group { margin: 0 16px 22px; }
+.pf-label { display: block; font-size: 14px; font-weight: 700; color: var(--primary); margin-bottom: 8px; }
+.pf-label .req { color: var(--danger); }
+.pf-input {
+  width: 100%; border: none; border-radius: var(--radius2);
+  background: var(--bg2); padding: 16px 16px; font-size: 15px;
+  color: var(--text); font-family: var(--font);
+}
+.pf-input::placeholder { color: var(--text3); }
+.pf-input:disabled { color: var(--text3); cursor: not-allowed; }
+.pf-input:focus { outline: 2px solid var(--primary-light); }
+.pf-hint { font-size: 12px; color: var(--text3); margin-top: 6px; padding: 0 2px; }
+.pf-submit { margin: 4px 16px 8px; }
+.pf-divider { height: 1px; background: var(--border); margin: 24px 16px; }
+.danger-zone { margin: 0 16px 24px; }
+.danger-title { color: var(--danger); font-weight: 800; font-size: 16px; margin-bottom: 10px; }
+.danger-desc { font-size: 14px; color: var(--text); line-height: 1.5; margin-bottom: 14px; }
+.danger-btn {
+  width: 100%; padding: 14px; border-radius: var(--radius2); border: 1.5px solid var(--danger);
+  background: transparent; color: var(--danger); font-weight: 700; font-size: 15px; cursor: pointer;
+  transition: var(--transition);
+}
+.danger-btn:hover { background: var(--danger); color: white; }
+
 /* ======== WALLET ======== */
 .wallet-hero {
   background: linear-gradient(145deg, #4C1D95, #7C3AED);
@@ -1118,6 +1148,7 @@ Login to order groceries near you
         class="input-field"
         id="loginPhone"
         placeholder="Enter Phone Number"
+        autocomplete="off"
         maxlength="10">
 </div>
     </div>
@@ -1239,7 +1270,7 @@ Delivering to your selected location
 Select your location to view nearby stores
 </div>
       </div>
-      <button class="btn btn-sm" style="background:#F59E0B; color:white; border:none; margin-left:auto; padding:8px 12px; font-size:12px;" onclick="checkPincode()">Change PIN</button>
+      <button class="btn btn-sm" style="background:#F59E0B; color:white; border:none; margin-left:auto; padding:8px 12px; font-size:12px;" onclick="showLocationModal()">Change PIN</button>
     </div>
 
     <!-- Delivery Timer -->
@@ -1376,7 +1407,7 @@ Select your location to view nearby stores
 <!-- ============================================================ -->
 <div id="page-product" class="page">
   <div class="prod-detail-header">
-    <button class="back-btn" onclick="history.back()">←</button>
+    <button class="back-btn" onclick="goBack()">←</button>
     <div style="flex:1; font-family:var(--font-head); font-size:16px; font-weight:700;" id="prodDetailHeaderName">Product</div>
     <button class="icon-btn" onclick="toggleWishlistItem(currentProduct)">❤️</button>
     <button class="icon-btn" onclick="shareProduct()">🔗</button>
@@ -1412,19 +1443,19 @@ Select your location to view nearby stores
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; font-size:13px;">
           <div style="background:var(--bg); padding:12px; border-radius:var(--radius2);">
             <div style="color:var(--text2);">Calories</div>
-            <div style="font-weight:700; font-size:16px;">52 kcal</div>
+            <div style="font-weight:700; font-size:16px;" id="prodDetailCalories">52 kcal</div>
           </div>
           <div style="background:var(--bg); padding:12px; border-radius:var(--radius2);">
             <div style="color:var(--text2);">Protein</div>
-            <div style="font-weight:700; font-size:16px;">0.7g</div>
+            <div style="font-weight:700; font-size:16px;" id="prodDetailProtein">0.7g</div>
           </div>
           <div style="background:var(--bg); padding:12px; border-radius:var(--radius2);">
             <div style="color:var(--text2);">Carbs</div>
-            <div style="font-weight:700; font-size:16px;">14g</div>
+            <div style="font-weight:700; font-size:16px;" id="prodDetailCarbs">14g</div>
           </div>
           <div style="background:var(--bg); padding:12px; border-radius:var(--radius2);">
             <div style="color:var(--text2);">Fat</div>
-            <div style="font-weight:700; font-size:16px;">0.2g</div>
+            <div style="font-weight:700; font-size:16px;" id="prodDetailFat">0.2g</div>
           </div>
         </div>
       </div>
@@ -1699,7 +1730,8 @@ Select your location to view nearby stores
 <div id="page-profile" class="page">
   <div class="profile-hero">
     <div class="avatar">👤</div>
-  
+    <div class="profile-name" id="profileHeroName">Guest User</div>
+    <div class="profile-phone" id="profileHeroPhone"></div>
     <div style="display:flex; gap:24px; margin-top:16px; text-align:center;">
       <div><div style="font-family:var(--font-head); font-size:20px; font-weight:800; color:white;">0</div><div style="font-size:12px; opacity:0.75;">Orders</div></div>
       <div><div style="font-family:var(--font-head); font-size:20px; font-weight:800; color:white;">₹0</div><div style="font-size:12px; opacity:0.75;">Wallet</div></div>
@@ -1709,6 +1741,14 @@ Select your location to view nearby stores
   <div class="profile-menu">
     <div class="menu-section">
       <div class="menu-section-title">Account</div>
+      <div class="menu-item" onclick="openAccountDetails()">
+        <div class="menu-item-icon">📝</div>
+        <div class="menu-item-text">
+          <div class="menu-item-label">Personal Details</div>
+          <div class="menu-item-sub" id="personalDetailsSub">Edit name & email</div>
+        </div>
+        <div class="menu-item-arrow">›</div>
+      </div>
       <div class="menu-item" onclick="showPage('page-wallet')">
         <div class="menu-item-icon">👛</div>
         <div class="menu-item-text">
@@ -1785,6 +1825,41 @@ Select your location to view nearby stores
         </div>
         <div class="menu-item-arrow" style="color:var(--danger);">›</div>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE: ACCOUNT / PERSONAL DETAILS -->
+<!-- ============================================================ -->
+<div id="page-account-details" class="page">
+  <div class="top-header">
+    <button class="back-btn" onclick="goBack()">←</button>
+    <div style="flex:1; font-family:var(--font-head); font-size:18px; font-weight:700;">Profile</div>
+  </div>
+  <div class="page-content">
+    <div style="height:12px;"></div>
+    <div class="pf-group">
+      <label class="pf-label" for="pfName">Name <span class="req">*</span></label>
+      <input type="text" id="pfName" class="pf-input" placeholder="Enter your full name" maxlength="40">
+    </div>
+    <div class="pf-group">
+      <label class="pf-label" for="pfMobile">Mobile Number <span class="req">*</span></label>
+      <input type="tel" id="pfMobile" class="pf-input" placeholder="10-digit mobile number" disabled>
+    </div>
+    <div class="pf-group">
+      <label class="pf-label" for="pfEmail">Email Address <span class="req">*</span></label>
+      <input type="email" id="pfEmail" class="pf-input" placeholder="you@example.com">
+      <div class="pf-hint">We promise not to spam you</div>
+    </div>
+    <button class="btn btn-primary pf-submit" onclick="saveAccountDetails()">Submit</button>
+
+    <div class="pf-divider"></div>
+
+    <div class="danger-zone">
+      <div class="danger-title">Delete Account</div>
+      <div class="danger-desc">Deleting your account will remove all your orders, wallet amount and any active referral</div>
+      <button class="danger-btn" onclick="confirmDeleteAccount()">Delete My Account</button>
     </div>
   </div>
 </div>
@@ -1923,12 +1998,12 @@ Select your location to view nearby stores
   <div style="padding:0 16px 12px;">
     <div style="display:flex; gap:10px; flex-wrap:wrap;">
       <button class="btn btn-primary btn-sm" onclick="showPage('page-store-products')">📦 Products</button>
-      <button class="btn btn-outline btn-sm" onclick="showPage('page-store-orders')">📋 Orders</button>
+      <button class="btn btn-outline btn-sm" onclick="document.getElementById('storeOrdersSection').scrollIntoView({behavior:'smooth'})">📋 Orders</button>
       <button class="btn btn-outline btn-sm" onclick="showStoreAnalytics()">📊 Analytics</button>
       <button class="btn btn-outline btn-sm" onclick="showStoreProfile()">⚙️ Settings</button>
     </div>
   </div>
-  <div class="store-orders">
+  <div class="store-orders" id="storeOrdersSection">
     <div style="font-family:var(--font-head); font-size:17px; font-weight:700; margin-bottom:12px;">New Orders</div>
     <div class="empty-state">
       <div class="icon">📋</div>
@@ -2167,9 +2242,10 @@ Select your location to view nearby stores
     <div class="modal-handle"></div>
     <div class="modal-title">📍 Change Delivery Location</div>
     <div class="input-wrap" style="margin-bottom:16px;">
-      <input type="text" class="input-field" placeholder="Search village, town or PIN code" id="locationSearch">
+      <input type="text" class="input-field" placeholder="Search village, town or PIN code" id="locationSearch" autocomplete="off" inputmode="numeric" onkeyup="if(event.key==='Enter') applyManualLocation()">
     </div>
-    <button class="btn btn-primary" style="margin-bottom:12px;" onclick="detectLocation()">📱 Use Current Location</button>
+    <button class="btn btn-primary" style="margin-bottom:12px;" onclick="applyManualLocation()">📍 Deliver to this Location</button>
+    <button class="btn btn-outline" style="margin-bottom:12px;" onclick="detectLocation()">📱 Use Current Location</button>
     <div style="font-size:13px; font-weight:700; color:var(--text2); margin-bottom:8px;">RECENT LOCATIONS</div>
     <div class="menu-item" onclick="setLocation('Rampur Village, UP - 243601')">
       <div class="menu-item-icon">🏠</div>
@@ -2316,18 +2392,18 @@ const APP_DATA = {
     { id:8, name:'Household', icon:'🧹', bg:'bg-purple' },
   ],
   products: [
-    { id:1, name:'Basmati Rice', weight:'1 kg', price:89, mrp:110, emoji:'🌾', category:1, store:'Ramesh Kirana', rating:4.5, desc:'Premium quality Basmati rice from Dehradun farms. Long grain, aromatic and fluffy when cooked.', bg:'bg-orange' },
-    { id:2, name:'Fresh Tomatoes', weight:'500 g', price:25, mrp:35, emoji:'🍅', category:2, store:'Sita Vegetable', rating:4.8, desc:'Farm-fresh tomatoes picked daily from local fields. Rich in lycopene and perfect for cooking.', bg:'bg-red' },
-    { id:3, name:'Amul Milk', weight:'1 Litre', price:66, mrp:66, emoji:'🥛', category:3, store:'Mohan Dairy', rating:4.7, desc:'Pasteurized and homogenized full cream milk. Rich in calcium and protein.', bg:'bg-blue' },
-    { id:4, name:'Toor Dal', weight:'500 g', price:75, mrp:90, emoji:'🟡', category:1, store:'Ramesh Kirana', rating:4.3, desc:'Premium Arhar/Toor dal, machine cleaned. Perfect for everyday dal preparation.', bg:'bg-orange' },
-    { id:5, name:'Potatoes', weight:'1 kg', price:30, mrp:40, emoji:'🥔', category:2, store:'Sita Vegetable', rating:4.6, desc:'Fresh potatoes from UP farms. Ideal for sabzi, fries and biryani.', bg:'bg-green' },
-    { id:6, name:'Eggs (Farm Fresh)', weight:'12 pieces', price:78, mrp:84, emoji:'🥚', category:3, store:'Mohan Dairy', rating:4.9, desc:'Country eggs from free-range hens. High protein, fresh from local farms daily.', bg:'bg-blue' },
-    { id:7, name:'Onions', weight:'1 kg', price:35, mrp:45, emoji:'🧅', category:2, store:'Sita Vegetable', rating:4.4, desc:'Fresh red onions. Essential kitchen ingredient.', bg:'bg-red' },
-    { id:8, name:'Aata (Wheat Flour)', weight:'5 kg', price:185, mrp:220, emoji:'🌾', category:1, store:'Ramesh Kirana', rating:4.6, desc:'Chakki-ground whole wheat flour. Soft rotis guaranteed.', bg:'bg-orange' },
-    { id:9, name:'Amul Butter', weight:'100 g', price:55, mrp:62, emoji:'🧈', category:3, store:'Mohan Dairy', rating:4.8, desc:'Pasteurized butter. Made from fresh cream.', bg:'bg-blue' },
-    { id:10, name:'Bananas', weight:'6 pieces', price:30, mrp:40, emoji:'🍌', category:4, store:'Sita Vegetable', rating:4.5, desc:'Ripe Robusta bananas. Ready to eat, energy-packed.', bg:'bg-green' },
-    { id:11, name:'Red Chilli Powder', weight:'200 g', price:45, mrp:60, emoji:'🌶️', category:5, store:'Ramesh Kirana', rating:4.3, desc:'Pure Kashmiri red chilli powder. Rich colour, medium hot.', bg:'bg-red' },
-    { id:12, name:'Tea (Brooke Bond)', weight:'250 g', price:85, mrp:100, emoji:'🍵', category:6, store:'Ramesh Kirana', rating:4.7, desc:'Premium CTC tea. Strong flavour, perfect for chai.', bg:'bg-orange' },
+    { id:1, name:'Basmati Rice', weight:'1 kg', price:89, mrp:110, emoji:'🌾', category:1, store:'Ramesh Kirana', rating:4.5, desc:'Premium quality Basmati rice from Dehradun farms. Long grain, aromatic and fluffy when cooked.', bg:'bg-orange', nutrition:{cal:'130 kcal',protein:'2.7g',carbs:'28g',fat:'0.3g'} },
+    { id:2, name:'Fresh Tomatoes', weight:'500 g', price:25, mrp:35, emoji:'🍅', category:2, store:'Sita Vegetable', rating:4.8, desc:'Farm-fresh tomatoes picked daily from local fields. Rich in lycopene and perfect for cooking.', bg:'bg-red', nutrition:{cal:'18 kcal',protein:'0.9g',carbs:'3.9g',fat:'0.2g'} },
+    { id:3, name:'Amul Milk', weight:'1 Litre', price:66, mrp:66, emoji:'🥛', category:3, store:'Mohan Dairy', rating:4.7, desc:'Pasteurized and homogenized full cream milk. Rich in calcium and protein.', bg:'bg-blue', nutrition:{cal:'61 kcal',protein:'3.2g',carbs:'4.8g',fat:'3.3g'} },
+    { id:4, name:'Toor Dal', weight:'500 g', price:75, mrp:90, emoji:'🟡', category:1, store:'Ramesh Kirana', rating:4.3, desc:'Premium Arhar/Toor dal, machine cleaned. Perfect for everyday dal preparation.', bg:'bg-orange', nutrition:{cal:'120 kcal',protein:'7g',carbs:'20g',fat:'0.4g'} },
+    { id:5, name:'Potatoes', weight:'1 kg', price:30, mrp:40, emoji:'🥔', category:2, store:'Sita Vegetable', rating:4.6, desc:'Fresh potatoes from UP farms. Ideal for sabzi, fries and biryani.', bg:'bg-green', nutrition:{cal:'77 kcal',protein:'2g',carbs:'17g',fat:'0.1g'} },
+    { id:6, name:'Eggs (Farm Fresh)', weight:'12 pieces', price:78, mrp:84, emoji:'🥚', category:3, store:'Mohan Dairy', rating:4.9, desc:'Country eggs from free-range hens. High protein, fresh from local farms daily.', bg:'bg-blue', nutrition:{cal:'155 kcal',protein:'13g',carbs:'1.1g',fat:'11g'} },
+    { id:7, name:'Onions', weight:'1 kg', price:35, mrp:45, emoji:'🧅', category:2, store:'Sita Vegetable', rating:4.4, desc:'Fresh red onions. Essential kitchen ingredient.', bg:'bg-red', nutrition:{cal:'40 kcal',protein:'1.1g',carbs:'9.3g',fat:'0.1g'} },
+    { id:8, name:'Aata (Wheat Flour)', weight:'5 kg', price:185, mrp:220, emoji:'🌾', category:1, store:'Ramesh Kirana', rating:4.6, desc:'Chakki-ground whole wheat flour. Soft rotis guaranteed.', bg:'bg-orange', nutrition:{cal:'340 kcal',protein:'12g',carbs:'72g',fat:'1.5g'} },
+    { id:9, name:'Amul Butter', weight:'100 g', price:55, mrp:62, emoji:'🧈', category:3, store:'Mohan Dairy', rating:4.8, desc:'Pasteurized butter. Made from fresh cream.', bg:'bg-blue', nutrition:{cal:'717 kcal',protein:'0.9g',carbs:'0.1g',fat:'81g'} },
+    { id:10, name:'Bananas', weight:'6 pieces', price:30, mrp:40, emoji:'🍌', category:4, store:'Sita Vegetable', rating:4.5, desc:'Ripe Robusta bananas. Ready to eat, energy-packed.', bg:'bg-green', nutrition:{cal:'89 kcal',protein:'1.1g',carbs:'23g',fat:'0.3g'} },
+    { id:11, name:'Red Chilli Powder', weight:'200 g', price:45, mrp:60, emoji:'🌶️', category:5, store:'Ramesh Kirana', rating:4.3, desc:'Pure Kashmiri red chilli powder. Rich colour, medium hot.', bg:'bg-red', nutrition:{cal:'282 kcal',protein:'12g',carbs:'50g',fat:'15g'} },
+    { id:12, name:'Tea (Brooke Bond)', weight:'250 g', price:85, mrp:100, emoji:'🍵', category:6, store:'Ramesh Kirana', rating:4.7, desc:'Premium CTC tea. Strong flavour, perfect for chai.', bg:'bg-orange', nutrition:{cal:'2 kcal',protein:'0g',carbs:'0.5g',fat:'0g'} },
   ],
   stores: [
     { id:1, name:'Ramesh Kirana Store', emoji:'🏪', dist:'0.5 km', time:'10-15 min', rating:4.8, reviews:126, open:true },
@@ -2420,6 +2496,9 @@ function showPage(id) {
   pages.forEach(p => { p.classList.remove('active'); p.style.removeProperty('display'); });
   next.classList.add('active');
   state.currentPage = id;
+
+  if (id === 'page-profile') populateProfileHero();
+  if (id === 'page-account-details') populateAccountDetailsForm();
 
   // Show/hide bottom nav and FAB
   const customerPages = [
@@ -2576,7 +2655,6 @@ loginSuccess({
 function loginSuccess(user){
 
     state.isGuest = false;
-    console.log("Guest Status:", state.isGuest);
     state.role = "customer";
     state.user = user;
 
@@ -2596,12 +2674,94 @@ localStorage.removeItem("fh_user");
 state.isGuest = true;
   state.cart = {};
   state.wishlist.clear();
-  state.role = null;
+  state.role = 'customer';
   state.user = null;
   updateCartBadge();
-  showPage('page-role');
+  // There is no separate role-selection page in this app (login always
+  // defaults to the customer flow - see the load handler above), so logout
+  // must return to page-login, not the nonexistent 'page-role'. Sending it
+  // to a missing page id left showPage() with nothing to show, so the
+  // profile page stayed on screen while toasts kept piling up.
+  showPage('page-login');
   showToast('Logged out successfully');
 }
+
+// ================================================================
+// PROFILE / ACCOUNT DETAILS
+// ================================================================
+function populateProfileHero() {
+  const nameEl = document.getElementById('profileHeroName');
+  const phoneEl = document.getElementById('profileHeroPhone');
+  if (!nameEl || !phoneEl) return;
+  const u = state.user || {};
+  if (state.isGuest || !u || (!u.name && !u.phone)) {
+    nameEl.textContent = 'Guest User';
+    phoneEl.textContent = 'Log in to view your details';
+    return;
+  }
+  nameEl.textContent = u.name || 'Customer';
+  phoneEl.textContent = u.phone || '';
+  const sub = document.getElementById('personalDetailsSub');
+  if (sub) sub.textContent = u.email ? u.email : 'Edit name & email';
+}
+
+function openAccountDetails() {
+  if (state.isGuest) {
+    showToast('Please log in to view your profile', 'warning');
+    showPage('page-login');
+    return;
+  }
+  showPage('page-account-details');
+}
+
+function populateAccountDetailsForm() {
+  const u = state.user || {};
+  const nameEl = document.getElementById('pfName');
+  const mobileEl = document.getElementById('pfMobile');
+  const emailEl = document.getElementById('pfEmail');
+  if (nameEl) nameEl.value = (u.name && u.name !== 'Customer') ? u.name : '';
+  if (mobileEl) mobileEl.value = u.phone ? u.phone.replace('+91', '').trim() : '';
+  if (emailEl) emailEl.value = u.email || '';
+}
+
+function saveAccountDetails() {
+  const name = document.getElementById('pfName').value.trim();
+  const email = document.getElementById('pfEmail').value.trim();
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  if (!name) {
+    showToast('Please enter your name', 'error');
+    return;
+  }
+  if (!email || !emailPattern.test(email)) {
+    showToast('Please enter a valid email address', 'error');
+    return;
+  }
+
+  state.user = { ...(state.user || {}), name, email };
+  localStorage.setItem('fh_user', JSON.stringify(state.user));
+  showToast('Profile updated successfully ✅', 'success');
+  populateProfileHero();
+  goBack();
+}
+
+function confirmDeleteAccount() {
+  const sure = confirm('Are you sure you want to delete your account? This will remove all your orders, wallet amount and any active referral. This cannot be undone.');
+  if (!sure) return;
+
+  localStorage.removeItem('fh_logged');
+  localStorage.removeItem('fh_role');
+  localStorage.removeItem('fh_user');
+  state.isGuest = true;
+  state.cart = {};
+  state.wishlist.clear();
+  state.role = 'customer';
+  state.user = null;
+  updateCartBadge();
+  showPage('page-login');
+  showToast('Your account has been deleted', 'warning');
+}
+
 function skipLogin() {
 
     state.isGuest = true;
@@ -2783,6 +2943,15 @@ function openProduct(id) {
   document.getElementById('prodDetailStore').textContent = p.store;
   document.getElementById('prodDetailDesc').textContent = p.desc;
   document.getElementById('prodDetailStars').innerHTML = '⭐'.repeat(Math.floor(p.rating)) + (p.rating % 1 ? '½' : '');
+  const n = p.nutrition || { cal:'—', protein:'—', carbs:'—', fat:'—' };
+  document.getElementById('prodDetailCalories').textContent = n.cal;
+  document.getElementById('prodDetailProtein').textContent = n.protein;
+  document.getElementById('prodDetailCarbs').textContent = n.carbs;
+  document.getElementById('prodDetailFat').textContent = n.fat;
+  document.querySelectorAll('#page-product .tab').forEach((t, i) => t.classList.toggle('active', i === 0));
+  document.getElementById('prodDesc').classList.remove('hidden');
+  document.getElementById('prodNutrition').classList.add('hidden');
+  document.getElementById('prodReviews').classList.add('hidden');
   updateProdDetailCart(id);
   showPage('page-product');
 }
@@ -3170,16 +3339,30 @@ function detectLocation() {
   } else showToast('Geolocation not supported', 'error');
 }
 
+// Handles the "Search village, town or PIN code" box in the location
+// modal. Previously nothing read this field, so typing a PIN and expecting
+// it to apply did nothing - the header stayed stuck on the last selected
+// location no matter what was typed.
+function applyManualLocation() {
+  const input = document.getElementById('locationSearch');
+  const value = input.value.trim();
+  if (!value) {
+    showToast('Enter a village, town or PIN code', 'error');
+    return;
+  }
+  if (/^\d+$/.test(value) && value.length !== 6) {
+    showToast('Enter a valid 6-digit PIN code', 'error');
+    return;
+  }
+  const label = /^\d{6}$/.test(value) ? `Selected Location · PIN: ${value}` : value;
+  setLocation(label);
+  input.value = '';
+}
+
 function setLocation(loc) {
   document.getElementById('currentLocation').textContent = loc + ' ▾';
   closeModal('locationModal');
   showToast('Delivery location updated 📍', 'success');
-}
-
-function checkPincode() {
-  const pin = prompt('Enter your PIN code:');
-  if (pin && pin.length === 6) showToast(`Checking serviceability for PIN ${pin}...`);
-  else showToast('Enter valid 6-digit PIN', 'error');
 }
 
 // ================================================================
@@ -3366,8 +3549,16 @@ function showTransactions() { showToast('Transaction history loaded'); }
 // ================================================================
 function showToast(msg, type = '') {
   const container = document.getElementById('toastContainer');
+  // Don't stack an identical toast on top of one that's already showing -
+  // this is what caused 3 duplicate "Logged out successfully" toasts to
+  // pile up when the logout button was clicked more than once while the
+  // page failed to navigate away.
+  if (container.lastElementChild && container.lastElementChild.dataset.msg === msg) return;
+  // Keep at most 3 toasts on screen at a time.
+  while (container.children.length >= 3) container.removeChild(container.firstElementChild);
   const toast = document.createElement('div');
   toast.className = `toast ${type}`;
+  toast.dataset.msg = msg;
   const icons = { success:'✅', error:'❌', warning:'⚠️' };
   toast.innerHTML = `<span>${icons[type]||'ℹ️'}</span> ${msg}`;
   container.appendChild(toast);
