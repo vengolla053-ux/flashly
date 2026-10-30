@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Owner Dashboard | Sri Gayathri</title>
+<style>
+:root{--cream:#f6f0e5;--paper:#fffaf1;--green:#31574c;--gold:#b38a45;--ink:#29251f;--muted:#756e63}
+*{box-sizing:border-box}body{margin:0;background:var(--cream);color:var(--ink);font-family:Arial,sans-serif}
+header{background:var(--green);color:#fff8e8;padding:20px}header div{max-width:1000px;margin:auto;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+main{max-width:1000px;margin:28px auto;padding:0 18px}.panel{background:var(--paper);border:1px solid #dfd2bd;padding:24px;margin-bottom:18px}
+h1,h2{font-family:Georgia;font-weight:normal}h1{font-size:35px;margin:0}h2{font-size:27px;margin:0 0 18px}
+button{cursor:pointer;padding:12px 16px;background:var(--green);border:1px solid var(--green);color:white;font-weight:bold}
+button.light{background:transparent;color:var(--green)}button.danger{background:#8c3932;border-color:#8c3932}
+input,select,textarea{width:100%;padding:12px;border:1px solid #d8c9ae;background:white;color:var(--ink);margin:7px 0 15px;font:inherit}
+label{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:#8b672f}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.hint{color:var(--muted);font-size:12px;line-height:1.7}
+.product{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:13px 0;border-top:1px solid #e5dac8}.product small{display:block;color:var(--muted);margin-top:5px}.actions{display:flex;gap:7px;flex-wrap:wrap}.actions button{padding:8px 10px;font-size:11px}
+#dashboard{display:none}.message{padding:12px;background:#f0e6d6;font-size:12px;margin:12px 0}
+@media(max-width:600px){.grid{grid-template-columns:1fr}.product{align-items:flex-start;flex-direction:column}.actions{width:100%}.actions button{flex:1}}
+</style></head><body>
+<header><div><div><h1>Sri Gayathri</h1><small>PRIVATE OWNER DASHBOARD</small></div><a href="index.html" style="color:#fff8e8">View customer website ↗</a></div></header>
+<main>
+<section class="panel" id="loginPanel"><h2>Owner sign in</h2><p class="hint">Sign in with the owner account created in Supabase Authentication. Only an account listed in the store_owners table can manage products.</p>
+<label>Email</label><input id="email" type="email" autocomplete="username" placeholder="Owner email">
+<label>Password</label><input id="password" type="password" autocomplete="current-password" placeholder="Password">
+<button id="login">Sign in securely</button><div id="loginMessage" class="message" hidden></div></section>
+<section id="dashboard">
+<div class="panel"><div style="display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap"><h2>Product management</h2><button id="logout" class="light">Sign out</button></div><p class="hint">Products saved here are stored in Supabase. Publish a product to show it on the customer website.</p></div>
+<div class="panel"><h2 id="formTitle">Add a product</h2><form id="productForm">
+<div class="grid"><div><label>Product name</label><input id="name" required maxlength="120" placeholder="Product name"></div><div><label>Category</label><select id="category"><option>Fancy Items</option><option>Stationery</option><option>Saree Falls</option><option>Other</option></select></div></div>
+<div class="grid"><div><label>Price (₹)</label><input id="price" type="number" min="0" step="0.01" required placeholder="0.00"></div><div><label>Product photo</label><input id="photo" type="file" accept="image/jpeg,image/png,image/webp"></div></div>
+<label>Description</label><textarea id="description" rows="3" maxlength="500" placeholder="Short product details"></textarea>
+<div class="grid"><button type="submit" id="save">Save product</button><button type="button" id="cancel" class="light">Clear form</button></div>
+<input type="hidden" id="editId"></form><div id="formMessage" class="message" hidden></div></div>
+<div class="panel"><h2>All products</h2><div id="productList" class="hint">Loading…</div></div>
+</section></main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="config.js"></script>
+<script>
+const {createClient}=supabase;
+const configured=window.SUPABASE_URL&&!window.SUPABASE_URL.startsWith("PASTE_")&&window.SUPABASE_ANON_KEY&&!window.SUPABASE_ANON_KEY.startsWith("PASTE_");
+const db=configured?createClient(window.SUPABASE_URL,window.SUPABASE_ANON_KEY):null;
+const $=id=>document.getElementById(id);let currentUser=null;
+function message(id,text){$(id).textContent=text;$(id).hidden=false;}
+function escapeHtml(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function money(n){return "₹"+Number(n).toLocaleString("en-IN",{maximumFractionDigits:2});}
+async function ownerCheck(){
+ const {data:{session}}=await db.auth.getSession();if(!session){showLogin();return;}
+ const {data,error}=await db.rpc("is_store_owner");
+ if(error||data!==true){await db.auth.signOut();showLogin();message("loginMessage","This account is not authorised as a store owner. Ask the project owner to verify the store_owners table.");return;}
+ currentUser=session.user;showDashboard();loadProducts();
+}
+function showLogin(){$("loginPanel").style.display="block";$("dashboard").style.display="none";}
+function showDashboard(){$("loginPanel").style.display="none";$("dashboard").style.display="block";}
+$("login").onclick=async()=>{if(!db){message("loginMessage","Setup incomplete: add the Supabase URL and publishable key in config.js.");return;}const email=$("email").value.trim(),password=$("password").value;if(!email||!password){message("loginMessage","Enter your owner email and password.");return;}const {error}=await db.auth.signInWithPassword({email,password});if(error){message("loginMessage",error.message);return;}await ownerCheck();};
+$("logout").onclick=async()=>{await db.auth.signOut();currentUser=null;showLogin();};
+async function loadProducts(){
+ const {data,error}=await db.from("products").select("*").order("created_at",{ascending:false});
+ if(error){$("productList").textContent="Could not load products: "+error.message;return;}
+ if(!data.length){$("productList").textContent="No products yet. Add your first real product above.";return;}
+ $("productList").innerHTML=data.map(p=>`<div class="product"><div><b>${escapeHtml(p.name)}</b><small>${escapeHtml(p.category)} · ${money(p.price)} · ${p.published?"Published":"Hidden"}</small></div><div class="actions"><button class="light" onclick="editProduct('${p.id}')">Edit</button><button class="light" onclick="toggleProduct('${p.id}',${!p.published})">${p.published?"Hide":"Publish"}</button><button class="danger" onclick="deleteProduct('${p.id}')">Delete</button></div></div>`).join("");
+}
+async function uploadPhoto(file){
+ if(!file)return null;
+ if(file.size>5*1024*1024)throw new Error("Choose an image smaller than 5 MB.");
+ if(!["image/jpeg","image/png","image/webp"].includes(file.type))throw new Error("Use JPG, PNG or WEBP images.");
+ const ext=file.name.split(".").pop().toLowerCase(),path=`${crypto.randomUUID()}.${ext}`;
+ const {error}=await db.storage.from("product-images").upload(path,file,{upsert:false,contentType:file.type});
+ if(error)throw error;
+ return db.storage.from("product-images").getPublicUrl(path).data.publicUrl;
+}
+$("productForm").onsubmit=async e=>{
+ e.preventDefault();const id=$("editId").value;
+ try{
+  $("save").disabled=true;$("save").textContent="Saving…";
+  let image_url=null;const file=$("photo").files[0];if(file)image_url=await uploadPhoto(file);
+  const payload={name:$("name").value.trim(),category:$("category").value,price:Number($("price").value),description:$("description").value.trim(),published:true,updated_at:new Date().toISOString()};
+  if(image_url)payload.image_url=image_url;
+  let result=id?await db.from("products").update(payload).eq("id",id):await db.from("products").insert(payload);
+  if(result.error)throw result.error;
+  clearForm();message("formMessage","Product saved. It is published on the customer website.");await loadProducts();
+ }catch(err){message("formMessage","Save failed: "+(err.message||"Please try again."));}
+ finally{$("save").disabled=false;$("save").textContent="Save product";}
+};
+window.editProduct=async id=>{
+ const {data,error}=await db.from("products").select("*").eq("id",id).single();if(error){alert(error.message);return;}
+ $("editId").value=data.id;$("name").value=data.name;$("category").value=data.category;$("price").value=data.price;$("description").value=data.description||"";
+ $("formTitle").textContent="Edit product";$("save").textContent="Update product";window.scrollTo({top:0,behavior:"smooth"});
+};
+window.toggleProduct=async(id,published)=>{const {error}=await db.from("products").update({published,updated_at:new Date().toISOString()}).eq("id",id);if(error)alert(error.message);else loadProducts();};
+window.deleteProduct=async id=>{if(!confirm("Permanently delete this product?"))return;const {error}=await db.from("products").delete().eq("id",id);if(error)alert(error.message);else loadProducts();};
+function clearForm(){$("productForm").reset();$("editId").value="";$("formTitle").textContent="Add a product";$("save").textContent="Save product";}
+$("cancel").onclick=clearForm;
+if(configured)ownerCheck();else message("loginMessage","Setup incomplete: add the Supabase URL and publishable key in config.js.");
+</script></body></html>
